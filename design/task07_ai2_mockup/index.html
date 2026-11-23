@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site Window mock-up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Design mock-up for Task 07, revision 2 (not part of the Unity application). Layout units are 1920 x 1080 stage pixels. */
+:root{
+  --surround:#0f1012; --desk:#1a1b1e; --raised:#232529; --raised-hi:#2b2d32; --rule:#3a3d42; --rule-soft:#2a2c31;
+  --paper:#ecebe5; --ink-2:#a6a49d; --ink-3:#6f6d68;
+  --lens:#74b4d0; --lens-dim:rgba(116,180,208,.18); --amber:#e2a94c; --amber-dim:rgba(226,169,76,.14);
+  --sans:"IBM Plex Sans",system-ui,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#08090a;color:var(--paper);font-family:var(--sans)}
+button{font-family:var(--sans)}
+/* ---------- reviewer chrome (outside the participant stage) ---------- */
+#chrome{position:fixed;inset:0 0 auto 0;height:44px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#202226;border-bottom:1px solid #34363b;font-size:12.5px;z-index:20;overflow-x:auto;white-space:nowrap}
+#chrome .tag{color:#d9a24a;font-weight:600;margin-right:6px}
+#chrome button{font:inherit;color:#ddd;background:#2d3036;border:1px solid #454850;border-radius:3px;padding:4px 9px;cursor:pointer}
+#chrome button:hover{background:#373a41}
+#chrome button.on{background:#4a4130;border-color:#8a7240;color:#f2d9a6}
+#chrome button:disabled{opacity:.4;cursor:default}
+#chrome .sep{width:1px;height:22px;background:#3c3f45;margin:0 4px}
+#viewport{position:fixed;inset:44px 0 0 0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stageWrap{position:relative}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:var(--surround);overflow:hidden;user-select:none}
+#xrSheet{display:none;position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;background:#f3f1ea;color:#222}
+/* ---------- strip, caption, plate ---------- */
+#strip{position:absolute;left:0;top:0;width:1920px;height:56px;display:flex;align-items:center;border-bottom:1px solid var(--rule-soft)}
+#strip .trial{width:341px;padding-left:32px;font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+#strip .trial b{color:var(--paper);font-weight:500;letter-spacing:.04em;text-transform:none;font-size:17px;margin-left:10px}
+#strip .status{display:flex;align-items:center;gap:12px;font-size:19px;color:var(--paper)}
+#strip .status .mark{width:9px;height:9px;background:var(--paper)}
+#strip .status.inspect .mark{background:var(--lens)}
+#strip .status.muted{color:var(--ink-2)} #strip .status.muted .mark{background:var(--ink-3)}
+#caption{position:absolute;left:341px;top:56px;width:1238px;height:34px;display:flex;align-items:center;justify-content:space-between;font-size:15px;color:var(--ink-2)}
+#caption b{color:var(--paper);font-weight:500}
+#caption .itag{display:inline-block;font-size:12px;letter-spacing:.14em;color:#0f1012;background:var(--lens);padding:2px 7px 1px;margin-right:10px;font-weight:600}
+#caption .vid{font-family:var(--mono);font-size:14px;display:flex;align-items:center;gap:8px}
+#caption .vid .dot{width:7px;height:7px;border-radius:50%;background:var(--ink-2)}
+#caption .vid.warn{color:var(--amber)} #caption .vid.warn .dot{background:var(--amber);border-radius:0}
+#plate{position:absolute;left:341px;top:90px;width:1238px;height:770px;background:#000;outline:1px solid var(--rule)}
+#plate canvas{display:block;width:1238px;height:770px}
+#plate.inspect{outline:2px solid var(--lens);cursor:zoom-in}
+#plate.inspect.dragging{cursor:grabbing}
+.reg{position:absolute;width:18px;height:18px;border-color:var(--lens);border-style:solid;display:none}
+#plate.inspect .reg{display:block}
+.reg.tl{left:-8px;top:-6px;border-width:2px 0 0 2px}.reg.tr{right:-8px;top:-6px;border-width:2px 2px 0 0}
+.reg.bl{left:-8px;bottom:-6px;border-width:0 0 2px 2px}.reg.br{right:-8px;bottom:-6px;border-width:0 2px 2px 0}
+/* ---------- wings ---------- */
+.wing{position:absolute;top:90px;width:301px;height:770px;border:1px dashed var(--rule-soft);padding:20px}
+#wingL{left:20px} #wingR{left:1599px}
+.wing.open{border:1px solid var(--rule);background:var(--desk)}
+#wingL.open{border-top:2px solid var(--lens)}
+#wingR.open{border-top:2px solid var(--paper)}
+.wing.disabled{opacity:.45;pointer-events:none}
+.wing .folded{color:var(--ink-3);font-size:15px;line-height:1.45}
+.lbl{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.wing .lbl.top{margin-bottom:10px}
+.wing h3{font-size:19px;font-weight:500;margin:0 0 8px;color:var(--paper)}
+.wbtn{display:block;width:100%;height:60px;text-align:left;padding:0 16px;margin-bottom:8px;background:var(--raised);border:1px solid var(--rule);color:var(--ink-2);font-size:18px;cursor:pointer}
+.wbtn small{display:block;font-size:13.5px;color:var(--ink-3);margin-top:2px}
+.wbtn.sel{background:var(--lens-dim);border-color:var(--lens);color:var(--paper)}
+.wbtn:hover:not(.sel):not(:disabled){color:var(--paper);border-color:#8c8a84}
+.seg{display:flex}
+.seg button{height:48px;flex:1;background:var(--raised);border:1px solid var(--rule);margin-left:-1px;color:var(--ink-2);font-size:17px;cursor:pointer}
+.seg button:first-child{margin-left:0}
+.seg button.sel{background:var(--lens-dim);border-color:var(--lens);color:var(--paper);position:relative;z-index:1}
+.seg.paper button.sel{background:rgba(236,235,229,.12);border-color:var(--paper)}
+.seg button:hover:not(.sel):not(:disabled){color:var(--paper)}
+.seg button:disabled{opacity:.35;cursor:default}
+.seg.mono button{font-family:var(--mono)}
+.btn{height:48px;width:100%;padding:0 16px;background:var(--raised);border:1px solid var(--rule);color:var(--paper);font-size:17px;cursor:pointer;text-align:left}
+.btn:hover:not(:disabled){border-color:#8c8a84;background:var(--raised-hi)}
+.btn:disabled{opacity:.3;cursor:default}
+.btnEnd{position:absolute;left:20px;right:20px;bottom:20px;height:64px;background:transparent;border:2px solid var(--lens);color:var(--paper);font-size:19px;font-weight:500;text-align:left;padding:0 18px;cursor:pointer}
+.btnEnd:hover:not(:disabled){background:var(--lens-dim)}
+.btnEnd:disabled{opacity:.35;cursor:default}
+#loc{display:block;width:261px;height:163px;outline:1px solid var(--rule);background:#000}
+.whint{font-size:14px;color:var(--ink-2);line-height:1.4;margin-top:10px}
+.gap{height:18px}
+/* nudge pad */
+.pad{display:grid;grid-template-columns:40px 173px 40px;grid-template-rows:30px 130px 30px;gap:4px;align-items:center;justify-items:center;margin:8px 0 10px}
+.pad button{background:var(--raised);border:1px solid var(--rule);color:var(--paper);font-size:15px;cursor:pointer;padding:0}
+.pad .ud{width:72px;height:30px}.pad .lr{width:40px;height:72px}
+.pad button:disabled{opacity:.22;cursor:default}
+.pad button:hover:not(:disabled){border-color:#cfcdc6;background:var(--raised-hi)}
+.readout{font-family:var(--mono);font-size:17px;line-height:1.6}
+.readout .ax{font-family:var(--sans);color:var(--ink-2);font-size:15px;display:inline-block;width:96px}
+.small{font-size:13.5px;color:var(--ink-3);line-height:1.4}
+.life{margin-top:10px}
+.lifeBar{display:flex;gap:4px}
+.lifeBar i{flex:1;height:4px;background:var(--rule)}
+.lifeBar i.past{background:var(--ink-2)} .lifeBar i.cur{background:var(--paper)} .lifeBar i.warn{background:var(--amber)}
+.lifeLbl{display:flex;gap:4px;margin-top:6px}
+.lifeLbl span{flex:1;font-size:11.5px;color:var(--ink-3);letter-spacing:.02em}
+.lifeLbl span.past{color:var(--ink-2)} .lifeLbl span.cur{color:var(--paper)} .lifeLbl span.warn{color:var(--amber)}
+.lifeMsg{font-size:15px;color:var(--ink-2);margin-top:8px;min-height:21px;line-height:1.35}
+.lifeMsg.warn{color:var(--amber)}
+.rule{border-top:1px solid var(--rule);margin:12px 0 10px}
+/* ---------- desk ---------- */
+#desk{position:absolute;left:0;top:860px;width:1920px;height:220px;background:var(--desk);border-top:1px solid var(--rule)}
+#deskL{position:absolute;left:0;top:0;width:341px;height:220px;padding:22px 28px 0 32px;border-right:1px solid var(--rule-soft)}
+#deskC{position:absolute;left:341px;top:0;width:1238px;height:220px;padding-top:18px}
+#deskR{position:absolute;left:1579px;top:0;width:341px;height:220px;padding:22px 28px 0 28px;border-left:1px solid var(--rule-soft)}
+.stepNo{font-family:var(--mono);font-size:34px;color:var(--paper);line-height:1}
+.stepNo span{color:var(--ink-3);font-size:22px}
+.stepTxt{font-size:18px;line-height:1.35;margin-top:12px}
+.stepAtt{font-size:15px;color:var(--ink-2);margin-top:8px}
+.hint{font-size:15px;color:var(--ink-2);height:22px;margin-bottom:10px;text-align:center}
+.keys{display:flex;justify-content:center;gap:40px}
+.key{width:360px;height:136px;background:var(--raised);border:1px solid var(--rule);color:var(--paper);text-align:left;padding:22px 26px;cursor:pointer;transition:opacity .15s,border-color .1s,background .1s;position:relative}
+.key .k{font-size:27px;font-weight:500;display:block}
+.key .d{font-size:16px;color:var(--ink-2);display:block;margin-top:10px;line-height:1.3}
+.key:hover{border-color:#8c8a84;background:var(--raised-hi)}
+.key.dormant{opacity:.32;pointer-events:none}
+.key.keyLocked{opacity:.55;pointer-events:none}
+.key.active.insp{border:2px solid var(--lens);background:var(--lens-dim)}
+.key.active.int{border:2px solid var(--paper)}
+.key.active .d{color:var(--paper)}
+.confirmRow{display:flex;justify-content:center;gap:20px}
+.btnConfirm{width:760px;height:136px;background:var(--paper);color:#141517;border:none;font-size:25px;font-weight:600;cursor:pointer;text-align:left;padding:0 30px}
+.btnConfirm small{display:block;font-weight:400;font-size:16px;color:#4a4a47;margin-top:6px;line-height:1.35}
+.btnConfirm:hover{background:#fff}
+.btnCancel{width:200px;height:136px;background:var(--raised);border:1px solid var(--rule);color:var(--paper);font-size:19px;cursor:pointer}
+.btnCancel:hover{border-color:#8c8a84}
+.locked{width:760px;height:136px;margin:0 auto;border:1px dashed var(--rule);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--ink-2)}
+.rec{list-style:none;margin:0;padding:0}
+.rec li{font-size:15px;line-height:1.35;color:var(--ink-2);padding:5px 0;border-bottom:1px solid var(--rule-soft)}
+.rec li:first-child{color:var(--paper)}
+.rec li.warn{color:var(--amber)}
+.rec .none{color:var(--ink-3)}
+/* ---------- event log drawer ---------- */
+#logDrawer{position:fixed;top:44px;right:0;bottom:0;width:560px;background:#16171a;border-left:1px solid #34363b;z-index:15;display:none;flex-direction:column;font-family:var(--mono);font-size:11.5px;color:#c9c7c0}
+#logDrawer header{padding:10px 12px;font-family:var(--sans);font-size:12.5px;color:#d9a24a;border-bottom:1px solid #2c2e33}
+#logDrawer header span{color:#8d8b85}
+#logList{overflow:auto;flex:1;padding:6px 10px}
+#logList div{padding:3px 0;border-bottom:1px solid #222428;word-break:break-all}
+#logList .t{color:#7c7a75}#logList .ty{color:#9fd0e6}
+#xrSheet svg{position:absolute;left:0;top:0}
+</style>
+</head>
+<body>
+<div id="chrome">
+  <span class="tag">MOCK-UP CONTROLS (reviewer only; simulated backend)</span>
+  <button id="tabWin" class="on">Windows prototype</button>
+  <button id="tabXr">Quest 3 sketch</button>
+  <span class="sep"></span>
+  <button id="injNack" title="The backend rejects the next request or nudge">Reject next</button>
+  <button id="injTimeout" title="The backend does not confirm receipt of the next request or nudge">No receipt for next</button>
+  <button id="injFail" title="The next nudge's movement is reported as not completed">Fail next movement</button>
+  <button id="resolve" disabled title="Experimenter resolves an unconfirmed request (late receipt arrives)">Resolve</button>
+  <button id="injFreeze" title="No fresh video pairs for 2.5 s">Video interruption</button>
+  <button id="injPause">Experimenter pause</button>
+  <span class="sep"></span>
+  <button id="scene">Scene: placeholder</button>
+  <button id="logBtn">Event log</button>
+  <button id="restart">Restart</button>
+</div>
+
+<div id="viewport"><div id="stageWrap">
+<div id="stage">
+  <div id="strip"><div class="trial">Trial<b>2</b></div><div class="status" id="status"><span class="mark"></span><span id="statusTxt"></span></div></div>
+  <div id="caption"><div id="capL"></div><div class="vid" id="capR"></div></div>
+  <div id="wingL" class="wing"></div>
+  <div id="plate"><canvas id="cv" width="1238" height="770"></canvas>
+    <i class="reg tl"></i><i class="reg tr"></i><i class="reg bl"></i><i class="reg br"></i></div>
+  <div id="wingR" class="wing"></div>
+  <div id="desk"><div id="deskL"></div><div id="deskC"></div><div id="deskR"></div></div>
+</div>
+
+<div id="xrSheet">
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" font-family="IBM Plex Sans, system-ui, sans-serif">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker></defs>
+  <text x="80" y="90" font-size="34" font-weight="600" fill="#1d1d1d">Quest 3 translation: the Windows layout is the front elevation of the XR room</text>
+  <text x="80" y="128" font-size="19" fill="#555">Sketch for discussion; dimensions provisional (screen size depends on D6, angular size vs effective resolution).</text>
+  <!-- plan view: triptych -->
+  <text x="80" y="200" font-size="15" letter-spacing="2.5" fill="#777">PLAN (seen from above)</text>
+  <g stroke="#222" fill="none" stroke-width="2">
+    <circle cx="560" cy="760" r="30"/><rect x="545" y="722" width="30" height="12" fill="#ddd"/>
+    <line x1="420" y1="300" x2="700" y2="300" stroke-width="8"/>
+    <line x1="420" y1="300" x2="330" y2="350" stroke-width="6"/>
+    <line x1="700" y1="300" x2="790" y2="350" stroke-width="6"/>
+    <line x1="470" y1="640" x2="650" y2="640" stroke-width="7"/>
+  </g>
+  <line x1="420" y1="292" x2="700" y2="292" stroke="#74b4d0" stroke-width="2"/>
+  <line x1="560" y1="730" x2="420" y2="300" stroke="#bbb"/><line x1="560" y1="730" x2="700" y2="300" stroke="#bbb"/>
+  <text x="560" y="276" font-size="15" fill="#222" text-anchor="middle">Window: world-locked stereo screen, about 2 m</text>
+  <text x="315" y="380" font-size="14" fill="#222" text-anchor="end">View wing</text>
+  <text x="315" y="398" font-size="13" fill="#666" text-anchor="end">hinged, about 25° inward</text>
+  <text x="805" y="380" font-size="14" fill="#222">Adjust wing</text>
+  <text x="805" y="398" font-size="13" fill="#666">hinged, about 25° inward</text>
+  <text x="670" y="636" font-size="14" fill="#222">Desk: lectern, about 0.6 m ahead,</text>
+  <text x="670" y="654" font-size="14" fill="#222">about 30° below eye level</text>
+  <text x="600" y="815" font-size="14" fill="#666">seated participant; no locomotion</text>
+  <!-- front view -->
+  <text x="1040" y="200" font-size="15" letter-spacing="2.5" fill="#777">FRONT VIEW (what the participant sees)</text>
+  <rect x="1040" y="230" width="800" height="560" fill="#0f1012"/>
+  <path d="M1060 290 L1180 270 L1180 610 L1060 640 Z" fill="#1a1b1e" stroke="#74b4d0"/>
+  <path d="M1820 290 L1700 270 L1700 610 L1820 640 Z" fill="#1a1b1e" stroke="#ecebe5"/>
+  <rect x="1195" y="270" width="490" height="340" fill="#4a4a4a"/>
+  <text x="1440" y="445" font-size="17" fill="#cfcfcf" text-anchor="middle">stereo video (Camera A or B pair)</text>
+  <text x="1120" y="300" font-size="11" fill="#a6a49d" text-anchor="middle">VIEW</text>
+  <text x="1760" y="300" font-size="11" fill="#a6a49d" text-anchor="middle">ADJUST</text>
+  <path d="M1090 780 L1790 780 L1730 660 L1150 660 Z" fill="#1a1b1e" stroke="#3a3d42"/>
+  <rect x="1262" y="688" width="118" height="54" fill="#232529" stroke="#3a3d42"/><text x="1321" y="720" font-size="13" fill="#ecebe5" text-anchor="middle">Allow</text>
+  <rect x="1381" y="688" width="0" height="0"/>
+  <rect x="1401" y="688" width="118" height="54" fill="#232529" stroke="#3a3d42"/><text x="1460" y="720" font-size="13" fill="#ecebe5" text-anchor="middle">Inspect</text>
+  <rect x="1540" y="688" width="118" height="54" fill="#232529" stroke="#3a3d42"/><text x="1599" y="720" font-size="13" fill="#ecebe5" text-anchor="middle">Intervene</text>
+  <text x="1440" y="820" font-size="14" fill="#555" text-anchor="middle">the same prefabs as Windows (Window, View wing, Adjust wing, Desk) in world-space canvases</text>
+  <text x="80" y="930" font-size="17" fill="#222">Kept identical: wording, option order, confirm for Allow and Retry, one-nudge-at-a-time lifecycle, Inspect-only camera and zoom, view-state code, logging.</text>
+  <text x="80" y="960" font-size="17" fill="#222">Excluded in XR: head-locked UI, gaze-dwell, sound or haptic cues, lighting changes, thumbstick (continuous) nudging. Input: controller ray and trigger (D9).</text>
+  <text x="80" y="990" font-size="17" fill="#222">Nudge arrows sized for ray precision at the wing distance (at least 2.5° across). Open: stereo zoom comfort while watching nudges at 3× (D7); four decoded streams on Quest (A5).</text>
+</svg>
+</div>
+</div></div>
+
+<div id="logDrawer"><header>CLIENT EVENT LOG (simulated) <span>· every record also carries session, trial, QPC and UTC times</span></header><div id="logList"></div></div>
+
+<script>
+"use strict";
+// ---------------- configuration: simulated backend (placeholder values, NOT predictions of the real cell) ----------------
+const T = { ack:140, ackTimeout:3000, received:60, validate:120, start:250, move:700, settle:300, receiptTimeout:1000,
+            monitor:3200, freezeShow:500, freezeClear:300, freezeLen:2500 };
+const NUDGE = { steps:[1,2,5], defStep:2, maxAbs:15, maxNudges:12 };
+const ELEMENTS = [["B1","A1"],["B2","A2"],["B3","C2"],["B4","C3"],["B5","D1"],["B6","D2"],["B7","E1"],["B8","E2"]];
+const INIT = [[0,0],[3,2],[6,-4],[-2,3],[4,0],[0,-5],[-3,-2],[2,2]];          // simulated as-placed offset (mm) per element
+const CAM = { A:{name:"Wrist camera", short:"Wrist", desc:"on the robot wrist, looking at the placement", w:1238, h:770, pxmm:6},
+              B:{name:"Overview camera", short:"Overview", desc:"fixed, overlooking the work area", w:1280, h:800, pxmm:1.6} };
+const AXIS = { a:"along rail", b:"across" };
+const STAGES = ["sent","received","accepted","moving","done"];
+const STAGE_LBL = { sent:"Sent", received:"Received", accepted:"Accepted", moving:"Moving", done:"Done" };
+
+let S, timers=[], t0=performance.now(), cmdSeq=0;
+const $ = id => document.getElementById(id), now = () => performance.now();
+function later(ms, fn){ const id=setTimeout(()=>{ timers=timers.filter(x=>x!==id); fn(); }, ms); timers.push(id); return id; }
+function clearTimers(){ timers.forEach(clearTimeout); timers=[]; }
+function fresh(){
+  return { wf:"Monitoring", mstatus:"placing", el:3, attempt:1, token:null, primary:"A",
+    insp:false, insEp:0, insStart:0, adj:false, armed:null, pending:null,
+    nudge:null, nseq:0, step:NUDGE.defStep, cum:{a:0,b:0}, trail:[{a:0,b:0}], anim:null,
+    view:{cam:"A",zoom:1,cx:619,cy:385}, paused:false, inject:{nack:false,timeout:false,fail:false},
+    video:{frozen:false,frozenAt:0,warn:false,clearAt:0}, seq:{A:0,B:0}, record:[], hover:null };
+}
+const signed = (mm) => (mm>0?"+":mm<0?"−":"±")+Math.abs(mm)+" mm";
+
+// ---------------- logging ----------------
+const logRows=[];
+function viewRect(v){ const c=CAM[v.cam], w=c.w/v.zoom, h=c.h/v.zoom; return [Math.round(v.cx-w/2),Math.round(v.cy-h/2),Math.round(w),Math.round(h)]; }
+function log(type, extra){
+  const v=S.view, off=v.cam==="A"?"B":"A";
+  const rec=Object.assign({ wf:S.wf, inspecting:S.insp, token:S.token||undefined,
+    view:{cam:v.cam,zoom:v.zoom,rect_src_px:viewRect(v)},
+    displayed:{on_screen:v.cam, seq:S.seq[v.cam], age_ms:S.video.frozen?Math.round(90+now()-S.video.frozenAt):90+Math.round(Math.random()*9), [off+"_seq"]:S.seq[off]},
+    cumulative_mm:{along_rail:S.cum.a, across:S.cum.b} }, extra||{});
+  logRows.push({t:((now()-t0)/1000).toFixed(3), type, rec}); if(logRows.length>500) logRows.shift();
+  if ($("logDrawer").style.display==="flex") drawLog();
+}
+function drawLog(){ $("logList").innerHTML=logRows.slice().reverse().map(r=>`<div><span class="t">${r.t}s</span> <span class="ty">${r.type}</span> ${esc(JSON.stringify(r.rec))}</div>`).join(""); }
+function esc(s){ return s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+function record(text, tone){ const r={text,tone:tone||""}; S.record.unshift(r); S.record=S.record.slice(0,6); return r; }
+
+// ---------------- simulated backend: decisions ----------------
+function hex4(){ return Math.floor(Math.random()*65536).toString(16).padStart(4,"0"); }
+function openDecision(){
+  S.token=`DP-T2-E${String(S.el).padStart(2,"0")}-A${S.attempt}-${hex4()}`;
+  S.wf="Open"; S.nseq=0; S.insEp=0; S.cum={a:0,b:0}; S.trail=[{a:0,b:0}]; S.record=[]; S.anim=null; S.nudge=null;
+  log("decision_open",{element:ELEMENTS[S.el-1][0], target:ELEMENTS[S.el-1][1], attempt:S.attempt, primary_camera:S.primary,
+     intervene:{retry:true, nudge:{axes:["along_rail","across"], step_sizes_mm:NUDGE.steps, default_step_mm:NUDGE.defStep, max_abs_mm_per_axis:NUDGE.maxAbs, max_nudges:NUDGE.maxNudges}}});
+  render();
+}
+function closeDecision(reason){
+  log("decision_close",{reason});
+  if (S.insp){ S.insp=false; log("inspect_end",{episode:S.insEp, dwell_ms:Math.round(now()-S.insStart), cause:"decision_close"}); }
+  resetView("decision_close"); S.adj=false; S.token=null;
+  S.cum={a:0,b:0}; S.trail=[{a:0,b:0}]; S.nudge=null; S.anim=null;   // the next decision point starts from a new origin
+}
+function send(kind){
+  const id=`c${++cmdSeq}`; S.pending={kind,id,t:now()}; S.wf="Pending";
+  const words={allow:"Allow",retry:"Retry",inspect_begin:"Inspection",inspect_end:"End of inspection"};
+  S.pending.rec=record(`${words[kind]} · sent`);
+  log("request_sent",{client_cmd_id:id, kind});
+  if (S.inject.nack){ S.inject.nack=false; later(T.ack, ()=>onNack("not_available")); }
+  else if (S.inject.timeout){ S.inject.timeout=false; later(T.ackTimeout, ()=>{ if(S.wf!=="Pending") return; S.wf="Unconfirmed";
+      S.pending.rec.text=`${words[kind]} · no confirmation`; S.pending.rec.tone="warn"; log("ack_timeout",{client_cmd_id:id, kind}); render(); }); }
+  else later(T.ack, onAck);
+  render();
+}
+function onAck(){
+  const p=S.pending; if(!p) return; S.pending=null;
+  log("ack",{client_cmd_id:p.id, kind:p.kind, rtt_ms:Math.round(now()-p.t)});
+  switch(p.kind){
+    case "inspect_begin": S.insp=true; S.insEp++; S.insStart=now(); S.wf="Open"; p.rec.text="Inspection started"; p.rec.tone="";
+      log("inspect_begin",{episode:S.insEp}); break;
+    case "inspect_end": S.wf="Open"; p.rec.text="Inspection ended"; break;
+    case "allow": closeDecision("allow");
+      if (S.el>=ELEMENTS.length){ S.wf="Ended"; log("trial_end",{}); break; }
+      S.el++; S.attempt=1; S.wf="Monitoring"; S.mstatus="placing"; later(T.monitor, openDecision); break;
+    case "retry": closeDecision("retry"); S.attempt++; S.wf="Monitoring"; S.mstatus="retrying"; later(T.monitor, openDecision); break;
+  }
+  render();
+}
+function onNack(reason){
+  const p=S.pending; if(!p) return; S.pending=null;
+  log("nack",{client_cmd_id:p.id, kind:p.kind, reason});
+  p.rec.text="Not accepted: that option is not available now."; p.rec.tone="warn"; S.wf="Open"; render();
+}
+
+// ---------------- simulated backend: one nudge at a time (receipt -> validation -> execution -> result -> ready) ----------------
+function sendNudge(axis, dir){
+  if (S.wf==="Nudging"||S.wf==="Pending"){ log("input_ignored",{control:"nudge", reason:"previous request in progress"}); return; }
+  if (S.wf!=="Open"||!S.adj||S.paused) return;
+  const id=`c${++cmdSeq}`, n={ seq:++S.nseq, id, axis, dir, step:S.step, stage:"sent", tone:"", msg:"Sent to the site.", t:now() };
+  n.rec=record(nudgeText(n)); S.nudge=n; S.wf="Nudging";
+  log("nudge_sent",{client_cmd_id:id, nudge_seq:n.seq, axis:axis==="a"?"along_rail":"across", direction:dir, step_mm:n.step});
+  if (S.inject.timeout){ S.inject.timeout=false; n.pendingTimeout=later(T.receiptTimeout, ()=>{ if(n.stage!=="sent") return;
+      n.stage="timeout"; n.tone="warn"; n.msg="No confirmation of receipt. The experimenter has been alerted."; n.rec.tone="warn"; n.rec.text=nudgeText(n);
+      S.wf="Unconfirmed"; log("nudge_timeout",{client_cmd_id:id, stage:"receipt"}); render(); }); }
+  else later(T.received, ()=>nudgeReceived(n));
+  render();
+}
+function nudgeText(n){ const w={sent:"sent",received:"received",accepted:"accepted",moving:"moving",done:"done",rejected:"not accepted",failed:"not completed",timeout:"no confirmation"}[n.stage];
+  return `Nudge ${n.seq} · ${signed(n.dir*n.step)} ${AXIS[n.axis]} · ${w}`; }
+function nset(n, stage, msg, tone){ n.stage=stage; n.msg=msg; n.tone=tone||""; n.rec.text=nudgeText(n); n.rec.tone=tone||""; }
+function nudgeReceived(n){
+  if (S.wf==="Unconfirmed") S.wf="Nudging";
+  nset(n,"received","Received by the site. Receipt does not mean the robot has started moving.");
+  log("nudge_received",{client_cmd_id:n.id, nudge_seq:n.seq}); render();
+  later(T.validate, ()=>{
+    const next = S.cum[n.axis]+n.dir*n.step;
+    let reason=null;
+    if (S.inject.nack){ S.inject.nack=false; reason="not_permitted"; }
+    else if (Math.abs(next)>NUDGE.maxAbs) reason="out_of_bounds";
+    else if (S.nseq>NUDGE.maxNudges) reason="limit_reached";
+    if (reason){ const txt={not_permitted:"Not accepted: the site did not permit this movement.",
+        out_of_bounds:`Not accepted: it would exceed the ±${NUDGE.maxAbs} mm limit ${AXIS[n.axis]}.`, limit_reached:"Not accepted: no further nudges at this decision point."}[reason];
+      nset(n,"rejected",txt,"warn"); log("nudge_rejected",{client_cmd_id:n.id, nudge_seq:n.seq, reason}); nudgeReady(n, 0); return; }
+    nset(n,"accepted","Accepted. Waiting for the movement to start."); log("nudge_accepted",{client_cmd_id:n.id, nudge_seq:n.seq}); render();
+    later(T.start, ()=>{
+      nset(n,"moving",`Moving ${signed(n.dir*n.step)} ${AXIS[n.axis]}.`); log("nudge_executing",{client_cmd_id:n.id, nudge_seq:n.seq});
+      const from={...S.cum}, to={...S.cum}; to[n.axis]=next; S.anim={from,to,t0:now(),dur:T.move}; render();
+      later(T.move, ()=>{
+        const fail=S.inject.fail; S.inject.fail=false;
+        const achieved = fail ? 0 : n.dir*n.step;
+        S.anim=null; if(!fail){ S.cum=to; S.trail.push({...to}); }
+        const res={commanded_mm:n.dir*n.step, achieved_mm:achieved, cumulative_mm:{along_rail:S.cum.a, across:S.cum.b}};
+        if (fail){ nset(n,"failed","Movement not completed. The offset shown is as reported by the site.","warn"); log("nudge_failed",Object.assign({client_cmd_id:n.id, nudge_seq:n.seq, reason:"not_completed"},res)); }
+        else { nset(n,"done","Done. The offset shows the result reported by the site."); log("nudge_completed",Object.assign({client_cmd_id:n.id, nudge_seq:n.seq},res)); }
+        render(); nudgeReady(n, T.settle);
+      });
+    });
+  });
+}
+function nudgeReady(n, delay){
+  later(delay, ()=>{ if(S.nudge!==n) return; S.wf="Open";
+    log("nudge_ready",{client_cmd_id:n.id, nudges_remaining:Math.max(0,NUDGE.maxNudges-S.nseq)}); render(); });
+  render();
+}
+
+// ---------------- participant actions ----------------
+function resetView(cause){ const c=CAM[S.primary], ch=S.view.cam!==S.primary||S.view.zoom!==1;
+  S.view={cam:S.primary,zoom:1,cx:c.w/2,cy:c.h/2}; if(ch&&cause) log("view_restore",{cause}); }
+function clampView(){ const v=S.view,c=CAM[v.cam],w=c.w/v.zoom,h=c.h/v.zoom;
+  v.cx=Math.min(c.w-w/2,Math.max(w/2,v.cx)); v.cy=Math.min(c.h-h/2,Math.max(h/2,v.cy)); }
+function act(a, arg){
+  if (S.paused) return;
+  const open = S.wf==="Open";
+  switch(a){
+    case "allow": if(!open) return; endHover("choice"); log("choice",{option:"allow"}); S.armed={kind:"allow"}; S.wf="Armed"; break;
+    case "inspect": if(!open) return; endHover("choice"); log("choice",{option:S.insp?"inspect_end":"inspect"});
+      if (S.insp){ log("inspect_end",{episode:S.insEp, dwell_ms:Math.round(now()-S.insStart), cause:"participant"}); S.insp=false; resetView("inspect_end"); send("inspect_end"); }
+      else send("inspect_begin"); return;
+    case "intervene": if(!open) return; endHover("choice"); S.adj=!S.adj; log(S.adj?"intervene_open":"intervene_close",{}); break;
+    case "closeAdj": if(!open) return; S.adj=false; log("intervene_close",{}); break;
+    case "endInsp": if(!open||!S.insp) return; log("inspect_end",{episode:S.insEp, dwell_ms:Math.round(now()-S.insStart), cause:"participant"}); S.insp=false; resetView("inspect_end"); send("inspect_end"); return;
+    case "step": if(!open) return; S.step=arg; log("step_size_select",{step_mm:arg}); break;
+    case "nudge": sendNudge(arg[0], arg[1]); return;
+    case "retry": if(!open) return; log("choice",{option:"retry"}); S.armed={kind:"retry"}; S.wf="Armed"; break;
+    case "confirm": if(S.wf!=="Armed") return; log("commit",{option:S.armed.kind}); send(S.armed.kind); return;
+    case "cancel": if(S.wf!=="Armed") return; log("arm_cancel",{option:S.armed.kind}); S.armed=null; S.wf="Open"; break;
+    case "cam": if(!S.insp||S.view.cam===arg) return; { const c=CAM[arg]; S.view={cam:arg,zoom:1,cx:c.w/2,cy:c.h/2}; log("view_camera",{camera:arg}); } break;
+    case "zoom": if(!S.insp||S.view.zoom===arg) return; S.view.zoom=arg; clampView(); log("view_zoom",{zoom:arg, anchor:"centre"}); break;
+    case "reset": if(!S.insp) return; { const c=CAM[S.view.cam]; S.view.zoom=1; S.view.cx=c.w/2; S.view.cy=c.h/2; log("view_reset",{}); } break;
+  }
+  render();
+}
+
+// ---------------- rendering ----------------
+function statusText(){
+  if (S.paused) return ["Paused by the experimenter","muted"];
+  if (S.wf==="Ended") return ["Trial complete","muted"];
+  if (S.wf==="Monitoring") return [S.mstatus==="retrying"?"Retrying placement":"Robot placing element","muted"];
+  if (S.wf==="Nudging"||(S.wf==="Unconfirmed"&&S.nudge&&S.nudge.stage==="timeout")){ const n=S.nudge;
+    if (n.stage==="moving") return [`Moving: ${signed(n.dir*n.step)} ${AXIS[n.axis]}`,""];
+    if (n.stage==="sent"||n.stage==="received"||n.stage==="accepted"||n.stage==="timeout") return ["Nudge received, waiting to start",""]; }
+  return S.insp ? ["Held for inspection","inspect"] : ["Holding for your decision",""];
+}
+function render(){
+  const [st,cls]=statusText(); $("status").className="status "+cls; $("statusTxt").textContent=st;
+  $("plate").classList.toggle("inspect", S.insp);
+  renderCaption(); renderWingL(); renderWingR(); renderDesk(); bindAll(); syncChrome();
+}
+function renderCaption(){ const v=S.view,c=CAM[v.cam];
+  $("capL").innerHTML = S.insp ? `<span class="itag">INSPECT</span><b>${c.name}</b> · ${c.desc} · <span style="font-family:var(--mono)">${v.zoom}×</span>` : `<b>${c.name}</b> · primary view`; }
+function renderWingL(){
+  const W=$("wingL"); W.className="wing"+(S.insp?" open":"")+(S.paused?" disabled":"");
+  if (!S.insp){ W.innerHTML=`<div class="lbl top">View</div><div class="folded">Camera and zoom controls open with <b style="color:var(--ink-2);font-weight:500">Inspect</b>.</div>`; return; }
+  const v=S.view;
+  W.innerHTML=`<div class="lbl top">View · inspecting</div>
+    <div class="lbl">Camera</div>
+    <button class="wbtn ${v.cam==="A"?"sel":""}" data-act="cam" data-arg="A">Wrist<small>on the robot wrist</small></button>
+    <button class="wbtn ${v.cam==="B"?"sel":""}" data-act="cam" data-arg="B">Overview<small>fixed, whole work area</small></button>
+    <div class="gap"></div><div class="lbl">Zoom</div>
+    <div class="seg mono">${[1,2,3].map(z=>`<button class="${v.zoom===z?"sel":""}" data-act="zoom" data-arg="${z}">${z}×</button>`).join("")}</div>
+    <div style="height:8px"></div><button class="btn" data-act="reset" ${v.zoom===1?"disabled":""}>Reset view</button>
+    <div class="gap"></div><div class="lbl">Location</div><canvas id="loc" width="261" height="163"></canvas>
+    <div class="whint">Click the image to zoom in at that point. Drag to move around.</div>
+    <button class="btnEnd" data-act="endInsp" ${S.wf==="Open"?"":"disabled"}>End inspection</button>`;
+  drawLocator();
+}
+function renderWingR(){
+  const W=$("wingR"); W.className="wing"+(S.adj?" open":"")+(S.paused?" disabled":"");
+  if (!S.adj){ W.innerHTML=`<div class="lbl top">Adjust</div><div class="folded">Nudging and retry open with <b style="color:var(--ink-2);font-weight:500">Intervene</b>.</div>`; return; }
+  const open=S.wf==="Open", left=Math.max(0,NUDGE.maxNudges-S.nseq);
+  const can=(ax,d)=> open && left>0 && Math.abs(S.cum[ax]+d*S.step)<=NUDGE.maxAbs;
+  const n=S.nudge;
+  W.innerHTML=`<div class="lbl top">Adjust · intervene</div>
+    <h3>Nudge position</h3>
+    <div class="lbl">Step size</div>
+    <div class="seg paper mono">${NUDGE.steps.map(s=>`<button class="${S.step===s?"sel":""}" data-act="step" data-arg="${s}" ${open?"":"disabled"}>${s} mm</button>`).join("")}</div>
+    <div class="pad">
+      <span></span><button class="ud" data-act="nudge" data-arg="b,1" ${can("b",1)?"":"disabled"} aria-label="across plus">▲</button><span></span>
+      <button class="lr" data-act="nudge" data-arg="a,-1" ${can("a",-1)?"":"disabled"} aria-label="along rail minus">◀</button>${planSvg()}<button class="lr" data-act="nudge" data-arg="a,1" ${can("a",1)?"":"disabled"} aria-label="along rail plus">▶</button>
+      <span></span><button class="ud" data-act="nudge" data-arg="b,-1" ${can("b",-1)?"":"disabled"} aria-label="across minus">▼</button><span></span>
+    </div>
+    <div class="lbl" style="margin-bottom:4px">Offset from original</div>
+    <div class="readout"><span class="ax">Along rail</span>${signed(S.cum.a)}<br><span class="ax">Across</span>${signed(S.cum.b)}</div>
+    <div class="small">${left} of ${NUDGE.maxNudges} nudges left · limit ±${NUDGE.maxAbs} mm</div>
+    ${lifeHtml(n)}
+    <div class="rule"></div>
+    <h3 style="margin-bottom:6px">Retry placement</h3>
+    <div class="small" style="margin-bottom:8px">Repeat from the start. Ends this decision point.</div>
+    <button class="btn" data-act="retry" ${open?"":"disabled"}>Retry placement…</button>
+    <div style="height:8px"></div><button class="btn" data-act="closeAdj" ${open?"":"disabled"} style="color:var(--ink-2);height:40px">Close panel</button>`;
+}
+function lifeHtml(n){
+  if (!n) return `<div class="life"><div class="lifeBar">${STAGES.map(()=>"<i></i>").join("")}</div><div class="lifeLbl">${STAGES.map(s=>`<span>${STAGE_LBL[s]}</span>`).join("")}</div><div class="lifeMsg">Each nudge is sent and carried out on its own.</div></div>`;
+  const term = {rejected:2, failed:4, timeout:1}[n.stage];
+  const idx = term!==undefined ? term : STAGES.indexOf(n.stage);
+  const cls = i => i<idx ? "past" : i===idx ? (term!==undefined?"warn":"cur") : "";
+  const label = (s,i) => i===idx && term!==undefined ? {rejected:"Rejected",failed:"Failed",timeout:"No reply"}[n.stage] : STAGE_LBL[s];
+  return `<div class="life"><div class="lifeBar">${STAGES.map((s,i)=>`<i class="${cls(i)}"></i>`).join("")}</div>
+    <div class="lifeLbl">${STAGES.map((s,i)=>`<span class="${cls(i)}">${label(s,i)}</span>`).join("")}</div>
+    <div class="lifeMsg ${n.tone}">Nudge ${n.seq}: ${n.msg}</div></div>`;
+}
+function planSvg(){
+  const W=173,H=130,cx=86,cy=65,k=4; // 4 px per mm; range square = ±15 mm
+  const r=NUDGE.maxAbs*k, pts=S.trail.map(p=>`${cx+p.a*k},${cy-p.b*k}`).join(" ");
+  let pend="";
+  if (S.nudge && (S.nudge.stage==="accepted"||S.nudge.stage==="moving"||S.nudge.stage==="received"||S.nudge.stage==="sent")){
+    const t={...S.cum}; t[S.nudge.axis]+=S.nudge.dir*S.nudge.step; pend=`<circle cx="${cx+t.a*k}" cy="${cy-t.b*k}" r="6" fill="none" stroke="#a6a49d" stroke-dasharray="2 2"/>`; }
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" style="background:#141517;outline:1px solid #2c2e33">
+    <rect x="${cx-r}" y="${cy-r}" width="${2*r}" height="${2*r}" fill="none" stroke="#3a3d42" stroke-dasharray="4 3"/>
+    <line x1="${cx-8}" y1="${cy}" x2="${cx+8}" y2="${cy}" stroke="#6f6d68"/><line x1="${cx}" y1="${cy-8}" x2="${cx}" y2="${cy+8}" stroke="#6f6d68"/>
+    <polyline points="${pts}" fill="none" stroke="#6f6d68" stroke-width="1.2"/>
+    ${S.trail.slice(1).map(p=>`<circle cx="${cx+p.a*k}" cy="${cy-p.b*k}" r="1.8" fill="#6f6d68"/>`).join("")}
+    ${pend}<circle cx="${cx+S.cum.a*k}" cy="${cy-S.cum.b*k}" r="4.5" fill="#ecebe5"/>
+    <text x="${W-5}" y="${H-5}" font-size="10" fill="#6f6d68" text-anchor="end" font-family="IBM Plex Sans">along rail →</text>
+    <text x="5" y="12" font-size="10" fill="#6f6d68" font-family="IBM Plex Sans">↑ across</text></svg>`;
+}
+function renderDesk(){
+  const el=ELEMENTS[S.el-1];
+  $("deskL").innerHTML = S.wf==="Ended" ? `<div class="lbl">Element</div><div class="stepNo">8<span> / 8</span></div><div class="stepTxt">All elements complete.</div>` :
+    `<div class="lbl">Element</div><div class="stepNo">${S.el}<span> / ${ELEMENTS.length}</span></div><div class="stepTxt">Place block ${el[0]}<br>at position ${el[1]}</div><div class="stepAtt">Attempt ${S.attempt}</div>`;
+  $("deskR").innerHTML = `<div class="lbl">Record · this decision point</div><ul class="rec">${S.record.length? S.record.slice(0,5).map(r=>`<li class="${r.tone}">${r.text}</li>`).join("") : `<li class="none">No requests yet.</li>`}</ul>`;
+  const C=$("deskC");
+  if (S.paused){ C.innerHTML=`<div class="hint">&nbsp;</div><div class="locked">Paused by the experimenter. Please wait.</div>`; return; }
+  if (S.wf==="Ended"){ C.innerHTML=`<div class="hint">&nbsp;</div><div class="locked">Trial complete. Please wait for the experimenter.</div>`; return; }
+  if (S.wf==="Armed"){
+    const v=S.view, viewing = `You are viewing: ${CAM[v.cam].name.toLowerCase()}, ${v.zoom}×.`;
+    const t = S.armed.kind==="allow" ? ["Confirm Allow",`The task will continue to the next element. ${viewing}`]
+      : ["Confirm retry","The robot will repeat this placement from the start. Nudges made here will not be kept."];
+    C.innerHTML=`<div class="hint">Confirm your decision</div><div class="confirmRow"><button class="btnConfirm" data-act="confirm">${t[0]}<small>${t[1]}</small></button><button class="btnCancel" data-act="cancel">Cancel</button></div>`; return; }
+  const hint = { Monitoring:"Options open when the robot reaches the next decision point.", Open:`Decision point: element ${S.el}, attempt ${S.attempt}`,
+    Pending:"Sent. Waiting for the site.", Nudging:"Nudge in progress. Options return when the site permits the next action.", Unconfirmed:"Waiting for the experimenter." }[S.wf];
+  const state = S.wf==="Monitoring" ? "dormant" : S.wf==="Open" ? "" : "keyLocked";
+  const key=(a,k,d,active,c)=>`<button class="key ${state} ${active?"active "+c:""}" data-act="${a}" data-key="${a}"><span class="k">${k}</span><span class="d">${d}</span></button>`;
+  C.innerHTML=`<div class="hint">${hint}</div><div class="keys">
+    ${key("allow","Allow","Accept the current state and continue",false,"")}
+    ${key("inspect","Inspect",S.insp?"Active · click to end inspection":"Hold the task and look more closely",S.insp,"insp")}
+    ${key("intervene","Intervene",S.adj?"Panel open · click to close":"Nudge the position, or retry the placement",S.adj,"int")}</div>`;
+}
+function bindAll(){
+  document.querySelectorAll("#stage [data-act]").forEach(b=>{
+    b.onclick=()=>{ const a=b.dataset.act, r=b.dataset.arg;
+      act(a, a==="zoom"||a==="step" ? +r : a==="nudge" ? [r.split(",")[0], +r.split(",")[1]] : r); };
+    if (b.dataset.key && !b.classList.contains("dormant") && !b.classList.contains("keyLocked")){
+      b.onpointerenter=()=>{ S.hover={key:b.dataset.key,t:now()}; log("option_hover_begin",{option:b.dataset.key}); };
+      b.onpointerleave=()=>endHover("leave"); }
+  });
+  // clicks on a locked pad are logged (the buttons themselves are disabled)
+  const pad=document.querySelector(".pad"); if (pad) pad.onpointerdown=(e)=>{ if(e.target.disabled && S.wf==="Nudging") log("input_ignored",{control:"nudge", reason:"previous request in progress"}); };
+}
+function endHover(cause){ if(!S.hover) return; log("option_hover_end",{option:S.hover.key, dwell_ms:Math.round(now()-S.hover.t), cause}); S.hover=null; }
+
+// ---------------- video plate: placeholder scenes with a movable element; zoom = source sub-rectangle ----------------
+function mk(w,h){ const c=document.createElement("canvas"); c.width=w; c.height=h; return c; }
+function speckle(g,w,h,n,a){ for(let i=0;i<n;i++){ const v=Math.random()*255|0; g.fillStyle=`rgba(${v},${v},${v},${a})`; g.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*2,1+Math.random()*2);} }
+function block(g,x,y,bw,bh,shade){ g.fillStyle="rgba(0,0,0,.35)"; g.fillRect(x-bw/2+14,y-bh/2+16,bw,bh);
+  g.fillStyle=shade; g.fillRect(x-bw/2,y-bh/2,bw,bh); g.fillStyle="rgba(255,255,255,.10)"; g.fillRect(x-bw/2,y-bh/2,bw,10);
+  g.fillStyle="rgba(0,0,0,.18)"; g.fillRect(x-bw/2,y+bh/2-10,bw,10); g.strokeStyle="rgba(0,0,0,.4)"; g.lineWidth=2; g.strokeRect(x-bw/2,y-bh/2,bw,bh); }
+function buildBgA(){ const w=1238,h=770,c=mk(w,h),g=c.getContext("2d");
+  const gr=g.createRadialGradient(w*.5,h*.45,80,w*.5,h*.5,900); gr.addColorStop(0,"#8d8d8d"); gr.addColorStop(1,"#3a3a3a"); g.fillStyle=gr; g.fillRect(0,0,w,h); speckle(g,w,h,26000,.18);
+  g.strokeStyle="rgba(230,230,230,.30)"; g.lineWidth=2;
+  for(const [x,y,l] of [[250,600,"C1"],[620,600,"C2"],[990,600,"C3"],[620,170,"D2"]]){ g.beginPath(); g.moveTo(x-40,y); g.lineTo(x+40,y); g.moveTo(x,y-40); g.lineTo(x,y+40); g.stroke();
+    g.fillStyle="rgba(230,230,230,.35)"; g.font="22px IBM Plex Mono, monospace"; g.fillText(l,x+14,y+34); }
+  block(g,250,600,300,200,"#b4b4b4");
+  g.fillStyle="rgba(255,255,255,.35)"; g.font="15px IBM Plex Mono, monospace"; g.fillText("PLACEHOLDER IMAGERY · wrist view",18,h-16); return c; }
+function buildBgB(){ const w=1280,h=800,c=mk(w,h),g=c.getContext("2d");
+  const gr=g.createLinearGradient(0,0,0,h); gr.addColorStop(0,"#9a9a9a"); gr.addColorStop(.38,"#7a7a7a"); gr.addColorStop(.40,"#5d5d5d"); gr.addColorStop(1,"#2e2e2e");
+  g.fillStyle=gr; g.fillRect(0,0,w,h); speckle(g,w,h,22000,.15);
+  g.strokeStyle="rgba(220,220,220,.16)"; g.lineWidth=1.5; for(let i=-8;i<=8;i++){ g.beginPath(); g.moveTo(640,150); g.lineTo(640+i*190,h); g.stroke(); }
+  for(let k=1;k<9;k++){ const y=320+k*k*7; g.beginPath(); g.moveTo(0,y); g.lineTo(w,y); g.stroke(); }
+  g.strokeStyle="#1d1d1d"; g.lineWidth=10; g.beginPath(); g.moveTo(80,760); g.lineTo(560,330); g.moveTo(170,790); g.lineTo(600,335); g.stroke();
+  g.fillStyle="#262626"; g.fillRect(320,470,120,70);
+  for(let r=0;r<3;r++) for(let i=0;i<5;i++){ if(r===2&&i>2) continue; const x=760+i*82-r*6, y=520-r*44; g.fillStyle="#b8b8b8"; g.fillRect(x,y,78,42); g.fillStyle="rgba(0,0,0,.25)"; g.fillRect(x,y+34,78,8); }
+  g.strokeStyle="rgba(230,230,230,.35)"; g.lineWidth=1.5; g.strokeRect(994,432,78,42); // target outline for the current element
+  g.fillStyle="rgba(255,255,255,.35)"; g.font="15px IBM Plex Mono, monospace"; g.fillText("PLACEHOLDER IMAGERY · overview",18,h-16); return c; }
+const bg={A:null,B:null}, work={A:mk(1238,770),B:mk(1280,800)}; let real=null, useReal=false;
+function elementPos(){ // simulated true offset of the element (mm) = as-placed offset + executed nudges (animated while moving)
+  const i=INIT[S.el-1], base = S.attempt>1 ? [1,-1] : i;
+  let c=S.cum; if (S.anim){ const p=Math.min(1,(now()-S.anim.t0)/S.anim.dur), e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+    c={a:S.anim.from.a+(S.anim.to.a-S.anim.from.a)*e, b:S.anim.from.b+(S.anim.to.b-S.anim.from.b)*e}; }
+  return {a:base[0]+c.a, b:base[1]+c.b}; }
+function compose(){
+  const p=elementPos(), held = S.wf!=="Monitoring";
+  let g=work.A.getContext("2d"); g.drawImage(bg.A,0,0);
+  const x=620+p.a*CAM.A.pxmm, y=600-p.b*CAM.A.pxmm; block(g,x,y,300,200,"#c6c6c6");
+  if (held){ g.fillStyle="#222"; g.fillRect(x-150,0,46,y-100+6); g.fillRect(x+104,0,46,y-100+6); g.fillStyle="rgba(255,255,255,.07)"; g.fillRect(x-150,0,10,y-94); g.fillRect(x+104,0,10,y-94); }
+  g=work.B.getContext("2d"); g.drawImage(bg.B,0,0);
+  const bx=994+p.a*CAM.B.pxmm, by=432-p.b*CAM.B.pxmm; g.fillStyle="#c8c8c8"; g.fillRect(bx,by,78,42); g.fillStyle="rgba(0,0,0,.25)"; g.fillRect(bx,by+34,78,8);
+  if (held){ g.strokeStyle="#2a2a2a"; g.lineCap="round"; g.lineWidth=36; g.beginPath(); g.moveTo(380,480); g.lineTo(430,300); g.lineTo(bx+20,by-150); g.stroke();
+    g.lineWidth=20; g.beginPath(); g.moveTo(bx+20,by-150); g.lineTo(bx+39,by-8); g.stroke(); }
+}
+function source(cam){ return cam==="A" ? (useReal&&real?real:work.A) : work.B; }
+const grain=[0,1,2,3].map(()=>{ const c=mk(412,257),g=c.getContext("2d"); speckle(g,412,257,9000,.5); return c; });
+const cv=$("cv"), g2=cv.getContext("2d"); let lastFrame=0, gi=0;
+function drawPlate(){ const v=S.view, s=source(v.cam), r=viewRect(v), dw=v.cam==="A"?1238:1232, dx=(1238-dw)/2;
+  g2.fillStyle="#000"; g2.fillRect(0,0,1238,770); g2.imageSmoothingEnabled=v.zoom>1; g2.drawImage(s,r[0],r[1],r[2],r[3],dx,0,dw,770);
+  g2.globalAlpha=.06; g2.drawImage(grain[gi],0,0,1238,770); g2.globalAlpha=1; }
+function drawLocator(){ const L=$("loc"); if(!L) return; const lg=L.getContext("2d"), v=S.view, c=CAM[v.cam], r=viewRect(v), W=L.width, H=L.height;
+  lg.drawImage(source(v.cam),0,0,W,H); lg.fillStyle="rgba(0,0,0,.45)"; lg.fillRect(0,0,W,H);
+  const sx=W/c.w, sy=H/c.h; lg.drawImage(source(v.cam),r[0],r[1],r[2],r[3],r[0]*sx,r[1]*sy,r[2]*sx,r[3]*sy);
+  lg.strokeStyle="#74b4d0"; lg.lineWidth=2; lg.strokeRect(r[0]*sx+1,r[1]*sy+1,r[2]*sx-2,r[3]*sy-2); }
+function frame(t){
+  if (t-lastFrame>=50){ lastFrame=t;
+    if (!S.video.frozen){ S.seq.A++; S.seq.B++; gi=(gi+1)%4; compose(); }   // an interruption holds both cameras' displayed pairs
+    drawPlate(); if (S.insp) drawLocator(); updateVideoCaption(now()); }
+  requestAnimationFrame(frame);
+}
+function updateVideoCaption(t){ const V=S.video, el=$("capR");
+  if (V.frozen&&!V.warn&&t-V.frozenAt>=T.freezeShow){ V.warn=true; log("video_state",{state:"interrupted"}); }
+  if (!V.frozen&&V.warn&&t>=V.clearAt){ V.warn=false; log("video_state",{state:"live"}); }
+  if (V.warn){ el.className="vid warn"; el.innerHTML=`<span class="dot"></span><span>Video interrupted · ${((V.frozen?t-V.frozenAt:V.clearAt-T.freezeClear-V.frozenAt)/1000).toFixed(1)} s</span>`; }
+  else { el.className="vid"; el.innerHTML=`<span class="dot"></span><span>Live</span>`; } }
+
+// plate pointer (Inspect only): click = zoom in at point, drag = pan
+let drag=null;
+function toSrc(e){ const r=cv.getBoundingClientRect(), v=S.view, vr=viewRect(v), dw=v.cam==="A"?1238:1232, dx=(1238-dw)/2;
+  const px=(e.clientX-r.left)/r.width*1238, py=(e.clientY-r.top)/r.height*770; return [vr[0]+(px-dx)/dw*vr[2], vr[1]+py/770*vr[3]]; }
+cv.addEventListener("pointerdown",e=>{ if(!S.insp||S.paused) return; drag={x:e.clientX,y:e.clientY,cx:S.view.cx,cy:S.view.cy,moved:false}; cv.setPointerCapture(e.pointerId); });
+cv.addEventListener("pointermove",e=>{ if(!drag) return; const r=cv.getBoundingClientRect(), vr=viewRect(S.view);
+  const dxp=(e.clientX-drag.x)/r.width*1238, dyp=(e.clientY-drag.y)/r.height*770;
+  if (!drag.moved&&Math.hypot(dxp,dyp)<5) return; if (S.view.zoom===1) return;
+  drag.moved=true; $("plate").classList.add("dragging"); S.view.cx=drag.cx-dxp*vr[2]/1238; S.view.cy=drag.cy-dyp*vr[3]/770; clampView(); });
+cv.addEventListener("pointerup",e=>{ if(!drag) return; $("plate").classList.remove("dragging");
+  if (drag.moved) log("view_pan",{});
+  else { const [sx,sy]=toSrc(e), z=Math.min(3,S.view.zoom+1); S.view.zoom=z; S.view.cx=sx; S.view.cy=sy; clampView();
+    log("view_zoom",{zoom:z, anchor_src_px:[Math.round(sx),Math.round(sy)]}); render(); }
+  drag=null; });
+cv.addEventListener("contextmenu",e=>e.preventDefault());
+
+// ---------------- reviewer chrome ----------------
+function syncChrome(){
+  $("injNack").classList.toggle("on",S.inject.nack); $("injTimeout").classList.toggle("on",S.inject.timeout); $("injFail").classList.toggle("on",S.inject.fail);
+  $("injPause").classList.toggle("on",S.paused); $("injPause").textContent=S.paused?"Experimenter resume":"Experimenter pause";
+  $("resolve").disabled = S.wf!=="Unconfirmed";
+}
+$("injNack").onclick=()=>{ S.inject.nack=!S.inject.nack; S.inject.timeout=false; syncChrome(); };
+$("injTimeout").onclick=()=>{ S.inject.timeout=!S.inject.timeout; S.inject.nack=false; syncChrome(); };
+$("injFail").onclick=()=>{ S.inject.fail=!S.inject.fail; syncChrome(); };
+$("resolve").onclick=()=>{ if(S.wf!=="Unconfirmed") return; log("experimenter_resolve",{});
+  if (S.pending){ S.wf="Pending"; onAck(); } else if (S.nudge && S.nudge.stage==="timeout"){ nudgeReceived(S.nudge); } };
+$("injFreeze").onclick=()=>{ if(S.video.frozen) return; S.video.frozen=true; S.video.frozenAt=now();
+  later(T.freezeLen, ()=>{ S.video.frozen=false; S.video.clearAt=now()+T.freezeClear; }); };
+$("injPause").onclick=()=>{ S.paused=!S.paused; log(S.paused?"paused":"resumed",{}); render(); };
+$("scene").onclick=()=>{ useReal=!useReal; $("scene").textContent = useReal ? (real?"Scene: real Camera A still (static; nudges not visible)":"Scene: real still (not loaded)") : "Scene: placeholder"; };
+$("logBtn").onclick=()=>{ const d=$("logDrawer"), o=d.style.display!=="flex"; d.style.display=o?"flex":"none"; $("logBtn").classList.toggle("on",o); if(o) drawLog(); fit(); };
+$("restart").onclick=()=>start();
+$("tabWin").onclick=()=>{ $("stage").style.display="block"; $("xrSheet").style.display="none"; $("tabWin").classList.add("on"); $("tabXr").classList.remove("on"); };
+$("tabXr").onclick=()=>{ $("stage").style.display="none"; $("xrSheet").style.display="block"; $("tabXr").classList.add("on"); $("tabWin").classList.remove("on"); };
+function fit(){ const vp=$("viewport"), lw=$("logDrawer").style.display==="flex"?560:0, s=Math.min((vp.clientWidth-lw-24)/1920,(vp.clientHeight-24)/1080);
+  for (const id of ["stage","xrSheet"]) $(id).style.transform=`scale(${s})`;
+  const w=$("stageWrap"); w.style.width=(1920*s)+"px"; w.style.height=(1080*s)+"px"; w.style.marginRight=lw+"px"; }
+addEventListener("resize",fit);
+function loadReal(){ const img=new Image(); img.onload=()=>{ const c=mk(1238,770); c.getContext("2d").drawImage(img,39,6,1238,770,0,0,1238,770); real=c; }; img.src="assets/camA_E1_seq30_rect_left.png"; }
+
+function start(){ clearTimers(); S=fresh(); t0=now(); cmdSeq=0; logRows.length=0;
+  log("session_start",{schema:"ai2-v1.1 (proposal rev 2)", scenario:"mock_T2", condition:"windows_2d", backend:"simulated"});
+  render(); later(T.monitor, openDecision); }
+
+// ---------------- review shortcuts: index.html#demo=<name> ----------------
+const DEMOS = {
+  decision:[], inspect:[["inspect"],["zoomAt",[660,600,2]]], overview:[["inspect"],["cam","B"],["zoomAt",[1010,420,2]]],
+  nudge:[["intervene"]],
+  moving:[["slow"],["intervene"],["nudge",["a",-1]]],
+  inspectnudge:[["inspect"],["zoomAt",[650,600,2]],["intervene"],["nudge",["a",-1]],["wait",1700],["nudge",["a",-1]],["wait",1700],["step",1],["nudge",["b",1]],["wait",1700]],
+  confirm:[["inspect"],["cam","B"],["zoomAt",[1010,420,2]],["intervene"],["allow"]],
+  rejected:[["intervene"],["nack"],["nudge",["a",1]],["wait",600]],
+  retry:[["intervene"],["retry"]],
+  freeze:[["freeze"]], paused:[["pause"]],
+};
+function runDemo(name){ const steps=DEMOS[name]; if(!steps) return;
+  const go=i=>{ if(i>=steps.length) return; const [a,arg]=steps[i]; let wait=400;
+    if (a==="zoomAt"){ S.view.zoom=arg[2]; S.view.cx=arg[0]; S.view.cy=arg[1]; clampView(); log("view_zoom",{zoom:arg[2]}); render(); }
+    else if (a==="wait") wait=arg; else if (a==="nack") S.inject.nack=true; else if (a==="slow") T.move=1e8;
+    else if (a==="freeze"){ T.freezeLen=1e9; $("injFreeze").onclick(); } else if (a==="pause") $("injPause").onclick();
+    else act(a,arg);
+    later(wait,()=>go(i+1)); };
+  later(500,()=>go(0)); }
+const demoName=(location.hash.match(/demo=(\w+)/)||[])[1];
+if (demoName && DEMOS[demoName]) T.monitor=100;
+bg.A=buildBgA(); bg.B=buildBgB(); loadReal(); fit(); start(); requestAnimationFrame(frame);
+if (demoName) runDemo(demoName);
+if (/\bxr\b/.test(location.hash)) $("tabXr").onclick();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# camera_gateway/.venv (Task 06). Exact versions; nothing else is installed.
+#   depthai 3.11.0  same as camera_validation/.venv (the validated pipeline and safeguards)
+#   numpy   2.4.6   same as camera_validation/.venv (depthai requires numpy<3)
+#   av      19.0.2  same as streaming_poc/.venv (PyAV: RTSP / MPEG-TS muxing of the camera bitstream)
+# Create: C:\Users\a1920234\AppData\Local\Programs\Python\Python313\python.exe -m venv camera_gateway\.venv
+#         camera_gateway\.venv\Scripts\python.exe -m pip install -r camera_gateway\requirements.txt
+depthai==3.11.0
+numpy==2.4.6
+av==19.0.2

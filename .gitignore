@@ -1,0 +1,30 @@
+# Phase2_Interface root repository (23 Nov 2026): the launch scripts, end-to-end test, tools, docs and design.
+# Data, environments and other repositories stay out.
+
+# the Unity participant interface: its own git repository (unity/Phase2Client)
+/unity/
+/_archive/
+/backups/
+
+# Python environments and caches
+**/.venv/
+**/venv/
+**/__pycache__/
+*.pyc
+
+# trial runs, sessions, relay logs; camera validation and test results (large images; evidence stays on disk)
+**/runs/
+**/results/
+**/test_results/
+
+# recordings and logs
+*.mp4
+*.mkv
+*.avi
+*.h264
+*.log
+
+# downloaded third-party tools (fetched again by their scripts; e.g. MediaMTX)
+**/tools/mediamtx_*/
+*.exe
+*.zip

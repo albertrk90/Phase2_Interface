@@ -1,0 +1,93 @@
+###############################################################################
+# Task 04B offline proof of concept: MediaMTX v1.21.3, LOCALHOST ONLY.
+#
+# Derived from the mediamtx.yml shipped in mediamtx_v1.21.3_windows_amd64.zip
+# (release SHA-256 b2f5246b...af2, verified 5 Nov 2026). Only the keys below
+# differ from that file; MediaMTX applies its built-in defaults to everything
+# omitted, and several of those defaults are listeners that are ON (RTMP, HLS,
+# WebRTC, SRT, MoQ), so each one is switched off here explicitly.
+#
+# What this allows:
+#   * one listener: RTSP on 127.0.0.1:8554, interleaved TCP only (no UDP RTP/RTCP,
+#     no multicast, no RTSPS);
+#   * publish and read only from 127.0.0.1 / ::1;
+#   * only the four named paths below (no all_others, so other paths are refused);
+#   * no API, metrics, pprof, playback or recording.
+# COROL's ports (8080 twin server, 8081 gripper server) are not used.
+#
+# NOT YET LAUNCHED. Review gate: run only after the researcher's approval, from
+# the streaming_poc directory:
+#   tools\mediamtx_v1.21.3\bin\mediamtx.exe config\mediamtx_localhost.yml
+###############################################################################
+
+logLevel: info
+logDestinations: [stdout, file]
+logFile: results/mediamtx.log
+
+readTimeout: 10s
+writeTimeout: 10s
+# Packets buffered per reader. Kept at the default; the PoC receiver measures
+# whether a backlog builds up rather than hiding it here.
+writeQueueSize: 512
+
+authMethod: internal
+authInternalUsers:
+  - user: any
+    pass:
+    ips: ["127.0.0.1", "::1"]
+    permissions:
+      - action: publish
+        path: "~^cam[AB]_(left|right)$"
+      - action: read
+        path: "~^cam[AB]_(left|right)$"
+
+api: false
+apiAddress: 127.0.0.1:9997
+metrics: false
+metricsAddress: 127.0.0.1:9998
+pprof: false
+pprofAddress: 127.0.0.1:9999
+playback: false
+playbackAddress: 127.0.0.1:9996
+
+rtsp: true
+rtspTransports: [tcp]
+rtspEncryption: "no"
+rtspAddress: 127.0.0.1:8554
+rtspsAddress: 127.0.0.1:8322
+rtpAddress: 127.0.0.1:8000
+rtcpAddress: 127.0.0.1:8001
+srtpAddress: 127.0.0.1:8004
+srtcpAddress: 127.0.0.1:8005
+rtspAuthMethods: [basic]
+
+rtmp: false
+rtmpAddress: 127.0.0.1:1935
+rtmpsAddress: 127.0.0.1:1936
+
+hls: false
+hlsAddress: 127.0.0.1:8888
+
+webrtc: false
+webrtcAddress: 127.0.0.1:8889
+webrtcLocalUDPAddress: 127.0.0.1:8189
+webrtcIPsFromInterfaces: false
+
+srt: false
+srtAddress: 127.0.0.1:8890
+
+moq: false
+moqHTTP2Address: 127.0.0.1:8892
+moqHTTP3Address: 127.0.0.1:8892
+moqQUICAddress: 127.0.0.1:8893
+
+pathDefaults:
+  source: publisher
+  record: false
+  maxReaders: 4
+
+paths:
+  camA_left:
+  camA_right:
+  camB_left:
+  camB_right:

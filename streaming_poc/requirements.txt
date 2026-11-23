@@ -1,0 +1,8 @@
+# Task 04B offline streaming proof of concept -- streaming_poc\.venv ONLY
+# (separate from camera_validation\.venv, which stays exactly as validated).
+# Installed 5 Nov 2026 with approval: --only-binary=:all:
+#
+# PyAV 19.0.2 (BSD-3) bundles FFmpeg libavcodec 63 / libavformat 63. The bundled
+# build includes libx264 (and libx265), so that FFmpeg build is GPL-licensed:
+# fine for local testing, NOT for redistribution in a Unity or other build.
+av==19.0.2

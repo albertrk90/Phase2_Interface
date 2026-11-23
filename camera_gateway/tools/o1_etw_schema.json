@@ -1,0 +1,777 @@
+{
+"Microsoft-Windows-TCPIP|1300|3": [
+"Tcb",
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"State",
+"Pid",
+"ProcessStartKey",
+"SendTrackerEnabled",
+"RcvBufSet"
+],
+"Microsoft-Windows-TCPIP|0|0": [
+"IfIndex",
+"RscStateChangeOidFailed",
+"RscHwCapOidFailedOrNotProcessed",
+"RscEnabledIp4",
+"RscEnabledIp6",
+"ForwardsIp4",
+"ForwardsIp6",
+"RscIncompatibleWfpCallout",
+"LSOv4MaxSize",
+"LSOv4Encap",
+"LSOv4TcpOptions",
+"LSOv4IpOptions",
+"RscFailureReasonV4",
+"RscFailureReasonV6",
+"GSOv4Encap",
+"GSOv4MaxSize",
+"GSOv6MaxSize",
+"GSOv6Encap",
+"GSOv6TcpOptionsSupported",
+"GSOv6IpExtensionHeadersSupported",
+"RscIPv4Enabled",
+"RscIPv6Enabled"
+],
+"Microsoft-Windows-Winsock-AFD|1035|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Option",
+"Value",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1004|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"BufferCount",
+"Buffer",
+"BufferLength",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1000|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"AddressFamily",
+"SocketType",
+"Protocol",
+"ProcessId",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1030|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status",
+"AddressLen",
+"Address"
+],
+"Microsoft-Windows-Winsock-AFD|1021|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Buffer",
+"BufferLength",
+"Status",
+"AddressLen",
+"Address"
+],
+"Microsoft-Windows-TCPIP|1549|0": [
+"Tcb"
+],
+"Microsoft-Windows-TCPIP|1051|0": [
+"OldState",
+"NewState",
+"SndNxt",
+"Tcb"
+],
+"Microsoft-Windows-TCPIP|1044|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-TCPIP|1034|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-Winsock-AFD|1020|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1002|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1001|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1037|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Backlog",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1018|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Buffer",
+"BufferLength",
+"Status",
+"AddressLen",
+"Address"
+],
+"Microsoft-Windows-TCPIP|1004|0": [
+"Tcb",
+"ISN",
+"RcvWnd",
+"RcvWndScale"
+],
+"Microsoft-Windows-TCPIP|1031|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-TCPIP|1332|5": [
+"Tcb",
+"Cwnd",
+"SndWnd",
+"BytesSent",
+"SeqNo",
+"SRtt",
+"RttVar",
+"RTO",
+"RcvWnd",
+"PacingRate",
+"TcpState",
+"CongestionState",
+"SndUna",
+"SndMax",
+"RecoveryMax",
+"RcvBufSet",
+"MaxRcvBuf",
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress"
+],
+"Microsoft-Windows-TCPIP|1551|1": [
+"Tcb",
+"Start",
+"End",
+"Timestamps",
+"SackedBytes",
+"BytesInFlight",
+"NoNewTransmitCreated"
+],
+"Microsoft-Windows-TCPIP|1064|2": [
+"Tcb",
+"TimerType",
+"WaitTimeMilliseconds",
+"Processor",
+"LastInterruptTime",
+"LastMicroseconds"
+],
+"Microsoft-Windows-TCPIP|1626|0": [
+"Tcb",
+"SenderLimitedBytes",
+"ReceiverLimitedBytes",
+"CongestionLimitedBytes"
+],
+"Microsoft-Windows-TCPIP|1206|0": [
+"Nbl",
+"IPTransportProtocol",
+"AddressFamily",
+"Source IPv4 Address",
+"Dest IPv4 Address",
+"IPv6SourceIpAddrLength",
+"IPv6 Source Address",
+"IPv6DestIpAddrLength",
+"IPv6 Dest Address",
+"Reason",
+"NblCount",
+"IPProtocol"
+],
+"Microsoft-Windows-TCPIP|1553|0": [
+"OriginalListener",
+"RedirectedListener",
+"Succeeded",
+"Redirected",
+"CodePath",
+"SockAddrLength",
+"LocalSockAddr",
+"RemoteSockAddr",
+"RedirectSockAddr"
+],
+"Microsoft-Windows-TCPIP|1601|0": [
+"Tcb",
+"NewState",
+"FastPath",
+"NBL",
+"ThSeq",
+"ThAck",
+"ThFlags",
+"RSC",
+"CoalescedSegCount",
+"RscTcpTimestampDelta",
+"EcnCePresent"
+],
+"Microsoft-Windows-TCPIP|1585|0": [
+"Tcb",
+"RackXmitTimeStampValid",
+"RackXmitTimeStampInUs",
+"RackEndSeq",
+"RackRttInUs",
+"NowInUs",
+"TimeStampInUs"
+],
+"Microsoft-Windows-TCPIP|1550|1": [
+"Tcb",
+"AckNo",
+"Start",
+"End",
+"Timestamps",
+"EverRetransmitted",
+"SackedBytes",
+"BytesInFlight",
+"State"
+],
+"Microsoft-Windows-TCPIP|1341|0": [
+"Tcb",
+"RttSample",
+"RttVar",
+"SRTT"
+],
+"Microsoft-Windows-TCPIP|1161|1": [
+"Tcb",
+"Injected",
+"NumBytes",
+"SndNxt",
+"SendAvailable"
+],
+"Microsoft-Windows-TCPIP|1229|0": [
+"Tcb",
+"OldCwnd",
+"NewCwnd",
+"Processor",
+"CurrentTick",
+"IdleTick",
+"Rto"
+],
+"Microsoft-Windows-TCPIP|1065|0": [
+"Tcb",
+"TimerType",
+"WaitTimeMilliseconds"
+],
+"Microsoft-Windows-TCPIP|1074|1": [
+"Tcb",
+"NumBytes",
+"SeqNo",
+"NumPkt"
+],
+"Microsoft-Windows-TCPIP|1033|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-Winsock-AFD|3001|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status",
+"AddressLen",
+"Address",
+"CurrentBacklog"
+],
+"Microsoft-Windows-TCPIP|1017|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-Winsock-AFD|1017|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1036|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-Winsock-AFD|1024|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Buffer",
+"BufferLength",
+"Status",
+"AddressLen",
+"Address",
+"AcceptEndpoint",
+"CurrentBacklog"
+],
+"Microsoft-Windows-Winsock-AFD|1023|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-TCPIP|1104|0": [
+"Tcb",
+"OptionType",
+"SoOptionType"
+],
+"Microsoft-Windows-Winsock-AFD|1003|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"BufferCount",
+"Buffer",
+"BufferLength",
+"Status"
+],
+"Microsoft-Windows-TCPIP|1159|2": [
+"Tcb",
+"Injected",
+"NumBytes",
+"SndNxt",
+"SendAvailable",
+"ActivityID",
+"SndLimBytesSnd",
+"SndLimBytesRwin",
+"SndLimBytesCwnd",
+"CWnd",
+"SRtt",
+"LossRecoveryEpisodes",
+"RtoEpisodes",
+"PtoEpisodes"
+],
+"Microsoft-Windows-TCPIP|1160|0": [
+"Tcb",
+"Injected",
+"NumBytes",
+"SndNxt"
+],
+"Microsoft-Windows-TCPIP|1602|0": [
+"Tcb",
+"SegmentCount",
+"NumBytes",
+"NblHead",
+"NblTail",
+"Inspect"
+],
+"Microsoft-Windows-Winsock-AFD|3003|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Buffer",
+"BufferLength"
+],
+"Microsoft-Windows-TCPIP|1157|0": [
+"Tcb",
+"Delivery",
+"Request",
+"NumBytes",
+"RequestFlags",
+"Length",
+"RequestStatus",
+"IsUrgentDelivery",
+"FullySatisfiedORDelayedPush",
+"RcvNxt"
+],
+"Microsoft-Windows-TCPIP|1637|0": [
+"Tcb",
+"NumBytes",
+"SndNxt",
+"ActivityID",
+"SndLimBytesSnd",
+"SndLimBytesRwin",
+"SndLimBytesCwnd",
+"CWnd",
+"SRtt",
+"LossRecoveryEpisodes",
+"RtoEpisodes",
+"PtoEpisodes"
+],
+"Microsoft-Windows-TCPIP|1330|0": [
+"Tcb",
+"Cwnd",
+"SndWnd",
+"BytesAcked",
+"SeqNo"
+],
+"Microsoft-Windows-TCPIP|1426|1": [
+"Tcb",
+"Injected",
+"NumBytes",
+"SndNxt",
+"ActivityID"
+],
+"Microsoft-Windows-TCPIP|1090|0": [
+"NBL"
+],
+"Microsoft-Windows-TCPIP|1175|0": [
+"Tcb",
+"Delivery",
+"Request",
+"NumBytes",
+"RequestFlags",
+"Length",
+"RequestStatus",
+"IsUrgentDelivery",
+"FullySatisfiedORDelayedPush",
+"RcvNxt"
+],
+"Microsoft-Windows-TCPIP|1100|0": [
+"Tcb",
+"TimerValue",
+"BytesToSend",
+"SendAvailable",
+"Cwnd",
+"MaxSndWnd"
+],
+"Microsoft-Windows-Winsock-AFD|1027|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Buffer",
+"BufferLength",
+"Status",
+"AddressLen",
+"Address",
+"AcceptEndpoint",
+"CurrentBacklog"
+],
+"Microsoft-Windows-TCPIP|1105|0": [
+"Tcb",
+"OptionType",
+"SoOptionType"
+],
+"Microsoft-Windows-Winsock-AFD|1026|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-TCPIP|1156|0": [
+"Tcb",
+"Delivery",
+"Request",
+"NumBytes",
+"RequestFlags",
+"Length",
+"RequestStatus",
+"IsUrgentDelivery",
+"FullySatisfiedORDelayedPush",
+"RcvNxt"
+],
+"Microsoft-Windows-TCPIP|1171|0": [
+"Tcb",
+"Delivery",
+"Request",
+"NumBytes",
+"RequestFlags",
+"Length",
+"RequestStatus",
+"IsUrgentDelivery",
+"FullySatisfiedORDelayedPush",
+"RcvNxt"
+],
+"Microsoft-Windows-TCPIP|1603|0": [
+"Tcb",
+"State",
+"Injected",
+"DataLength"
+],
+"Microsoft-Windows-TCPIP|1587|0": [
+"Tcb",
+"ThAck",
+"SndUna",
+"SndMax",
+"RecoveryMax",
+"SndWnd",
+"SndWndChanged",
+"SackUpdated",
+"TcpState",
+"CongestionState",
+"Frto"
+],
+"Microsoft-Windows-TCPIP|1176|0": [
+"Tcb",
+"Delivery",
+"Request",
+"NumBytes",
+"RequestFlags",
+"Length",
+"RequestStatus",
+"IsUrgentDelivery",
+"FullySatisfiedORDelayedPush",
+"RcvNxt"
+],
+"Microsoft-Windows-Winsock-AFD|3006|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Status"
+],
+"Microsoft-Windows-TCPIP|1043|2": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey",
+"Inspect"
+],
+"Microsoft-Windows-TCPIP|1038|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-TCPIP|1214|0": [
+"IPTransportProtocol",
+"AddressFamily",
+"LocalSockAddrLength",
+"LocalSockAddr",
+"RemoteSockAddrLength",
+"RemoteSockAddr",
+"Reason",
+"PacketCount"
+],
+"Microsoft-Windows-TCPIP|1158|0": [
+"Tcb",
+"Delivery",
+"Request",
+"NumBytes",
+"RequestFlags",
+"Length",
+"RequestStatus",
+"IsUrgentDelivery",
+"FullySatisfiedORDelayedPush",
+"RcvNxt"
+],
+"Microsoft-Windows-Winsock-AFD|4019|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"PauseUnPause",
+"TLBacklogCount"
+],
+"Microsoft-Windows-TCPIP|1066|0": [
+"Tcb",
+"TimerType",
+"WaitTimeMilliseconds"
+],
+"Microsoft-Windows-TCPIP|1351|1": [
+"Tcb",
+"SndUna",
+"RexmitCount",
+"SRTT",
+"RTO",
+"SndMax",
+"RecoveryMax",
+"TcpState",
+"CongestionState",
+"Frto",
+"TotalRT",
+"MaxRT"
+],
+"Microsoft-Windows-TCPIP|1186|0": [
+"Tcb",
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"NewState",
+"RexmitCount"
+],
+"Microsoft-Windows-TCPIP|1584|0": [
+"Tcb",
+"Start",
+"End",
+"Timestamps",
+"InFlightCount",
+"SackedBytes",
+"BytesInFlight"
+],
+"Microsoft-Windows-TCPIP|1625|0": [
+"Tcb",
+"OldCwnd",
+"NewCwnd",
+"Processor",
+"CurrentTick",
+"IdleTick",
+"Rto"
+],
+"Microsoft-Windows-TCPIP|1183|0": [
+"Tcb",
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"NewState",
+"RexmitCount"
+],
+"Microsoft-Windows-TCPIP|1187|0": [
+"Tcb",
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"NewState",
+"RexmitCount"
+],
+"Microsoft-Windows-TCPIP|1222|0": [
+"Tcb",
+"OldCwnd",
+"NewCwnd",
+"Processor",
+"CurrentTick",
+"IdleTick",
+"Rto"
+],
+"Microsoft-Windows-TCPIP|1475|0": [
+"Tcb",
+"State",
+"Cwnd",
+"SSThresh"
+],
+"Microsoft-Windows-TCPIP|1069|0": [
+"Tcb",
+"Cwnd",
+"SSThresh",
+"RttSample",
+"NumBytes",
+"SeqNo",
+"SndUna",
+"Round",
+"SRTT",
+"RTO",
+"DWnd",
+"BaseRtt",
+"DupAckCount"
+],
+"Microsoft-Windows-TCPIP|1565|0": [
+"Tcb",
+"OldState",
+"NewState"
+],
+"Microsoft-Windows-TCPIP|1102|0": [
+"Tcb",
+"SndUna",
+"SndMax"
+],
+"Microsoft-Windows-Winsock-AFD|1032|0": [
+"EnterExit",
+"Location",
+"Process",
+"Endpoint",
+"Reason"
+],
+"Microsoft-Windows-TCPIP|1039|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+],
+"Microsoft-Windows-TCPIP|1184|0": [
+"Tcb",
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"NewState",
+"RexmitCount"
+],
+"Microsoft-Windows-TCPIP|1040|1": [
+"LocalAddressLength",
+"LocalAddress",
+"RemoteAddressLength",
+"RemoteAddress",
+"Status",
+"ProcessId",
+"Compartment",
+"Tcb",
+"ProcessStartKey"
+]
+}

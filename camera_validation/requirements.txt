@@ -1,0 +1,5 @@
+# Phase 2 camera validation (Task 03). Install into the project venv only:
+#   .venv\Scripts\python.exe -m pip install -r requirements.txt
+depthai==3.11.0
+opencv-python==4.14.0.94
+numpy==2.4.6
