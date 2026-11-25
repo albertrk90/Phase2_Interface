@@ -179,9 +179,16 @@ def main(argv=None):
         check("E11_trial_errors_from_the_variation_schedule", ts.get("entry") == "DEV/early-middle/middle" and ts.get("errors_at") == ["P05", "P10"], json.dumps(ts)[:400])
         ev = jsonl(run / "twin_state" / "object_events.jsonl")
         # 23 Nov 2026: Facilitator A's by-hand return of a brick to its tray slot (tray-slot recovery) is also a settle; it is checked by E14
-        settles = [e for e in ev if e.get("event") == "settle" and e.get("by") != "facilitator_a_by_hand"]
+        # 25 Nov 2026 (researcher): every release happens 10 mm short of the rest pose and the brick then settles the last 10 mm
+        # ('settle_after_release'); those are checked by E15, the trial rule's settles to nominal by E12
+        settles = [e for e in ev if e.get("event") == "settle" and e.get("by") not in ("facilitator_a_by_hand", "settle_after_release")]
         check("E12_left_and_corrected_bricks_settled_to_nominal", len(settles) >= 1 and all(e.get("by") == "trial_rule_settle_to_nominal" for e in settles),
               json.dumps([(e.get("object"), round(e.get("moved_mm", 0), 2)) for e in settles]))
+        rels = [e for e in ev if e.get("event") == "release" and "10 mm" in str(e.get("milestone", ""))]
+        gaps = [e for e in ev if e.get("event") == "settle" and e.get("by") == "settle_after_release"]
+        check("E15_every_release_10mm_short_then_settled", len(rels) >= 16 and len(gaps) == len(rels)
+              and all(abs(e.get("moved_mm", 0) - 10.0) <= 0.1 for e in gaps),
+              "{} releases 10 mm short, {} settles; moved {}".format(len(rels), len(gaps), sorted({round(e.get("moved_mm", 0), 2) for e in gaps})))
         objs = get(TW + "/api/phase2/objects?all=1")["objects"]
         import collections
         cnt = collections.Counter(o["state"] for o in objs.values())

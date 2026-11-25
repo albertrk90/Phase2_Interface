@@ -3,7 +3,7 @@
 # From lab_digital_twin (branch albert-phase2-alpha), each in its own window (QuickEdit off, so a click cannot pause it):
 #   1. Mohsi's twin server   digital_twin/server.py via uvicorn on 127.0.0.1:8080 (loopback only)
 #   2. the Phase 2 trial host  Albert/phase2/trial_host.py on 127.0.0.1:8095 (placements + interventions, request ledger)
-#   3. the two view renderers  digital_twin/phase2/vcam_render.py (wrist + site)
+#   3. the two view renderers  digital_twin/phase2/vcam_render.py (wrist + site + site_lantern, 25 Nov 2026)
 # then Remote mode ON, the twin page (operator view) and the S4 participant interface (nominal protocol, facilitator console on
 # the right; F9 hides it). The trial: 16 placements, formal CDPs at 5 and 10 (SAGAT RG-2 at 10), inactive potential CDP at 14.
 #
@@ -58,7 +58,7 @@ foreach ($id in @($st.unresolved)) {
     Invoke-RestMethod -Method Post "http://127.0.0.1:8095/api/requests/$id/resolve" -ContentType application/json -Body $body | Out-Null
     Write-Host "  recorded: $($map[$ans]) by $op" -ForegroundColor Green
 }
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "`$host.UI.RawUI.WindowTitle='View renderers: wrist + site (SIMULATION ONLY)'; . '$NoQE'; & '$DTPy' phase2\vcam_render.py --cams wrist --site" -WorkingDirectory $DT
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "`$host.UI.RawUI.WindowTitle='View renderers: wrist + site + site_lantern (SIMULATION ONLY)'; . '$NoQE'; & '$DTPy' phase2\vcam_render.py --cams wrist --site --fixed site_lantern" -WorkingDirectory $DT
 Write-Host "Twin server http://127.0.0.1:8080  (Remote mode ON)   Trial host http://127.0.0.1:8095/api/status"
 if ($Browser -and -not $NoBrowser) { Start-Process "http://127.0.0.1:8080/?config=client_config_phase2_experiment.json" }
 
