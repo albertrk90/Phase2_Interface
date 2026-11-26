@@ -54,7 +54,7 @@ HOME is the arm upright at the middle screen, rail 4030. It is also the new divi
 ## Update (25 Nov 2026, evening)
 - **Grasp taught:** one pose, `data/poses/2026-11-25_1737_ll_pose_pick_grasped.json`. The fingers close across the 20 mm thickness, with their tips through the hole near the plate's tip; the TCP sits on the plate axis, 113 mm above the centre.
 - **Row 6:** now uses columns 1–6. Its column 7 is out of reach from any station that keeps the arm clear. This renumbers P06–P11.
-- **Every other pocket is filled at the start:** 74 pockets, so the participant finishes with the whole lantern.
+- **All other pockets are filled at the start:** 74 pockets (all but the 16 targets), so the participant finishes with the whole lantern.
   - The 32 spare tray plates are relocated into pockets, and the tray holds only the 16 to pick.
   - The other 42 are fixed plates kept from the built layout: "lantern fixed plate R..C..", scenery, never moved.
   - Physically the lab needs 90 plates.
@@ -68,3 +68,28 @@ HOME is the arm upright at the middle screen, rail 4030. It is also the new divi
   - **Result:** 16/16 in about 570 s, with no arm or gripper contact detected.
   - **Watcher:** runs the viewer's triangle test itself every 40 ms, because the page's own counter doesn't report in a headless page. Proven on a deliberate arm-through-formwork pose.
 - **RegoLight e2e: 15/15.** The new check E15 confirms all 18 releases happened 10 mm short and each brick then settled.
+
+## Update (26 Nov 2026): errors and interventions
+Simulation only. The trial host's lantern config is now `lantern_trial_v2_2026-11-26`.
+
+- **Recovery stand:** your corrected model (`PHASE 2 lantern brick recovery stand.glb`) is merged into the scene by `scene_import.py` as "lantern recovery stand" (mesh collider).
+  - Slot 22.5 mm for the 20 mm plate.
+  - The plate stands in it point-down, grasp hole up, turned 90° from the tray.
+  - The robot picks it from rail 8473 mm; the arm stays 44 mm clear of the formwork (approximate model).
+- **Errors (schedule v2.1, backend-only):** the plate's line of descent is shifted along the row (pocket z; + = away from the rail side) by 10, 20 or 30 mm (small / medium / large). The plate comes to rest at first contact, perched up its axis: about 21, 45 and 65 mm for 10, 20 and 30 mm. Scripted, no physics; whether a real plate stays perched is to be decided at commissioning.
+  - Errors are at the active CDPs only. CDP allocations and every RegoLight entry are identical to v2.
+  - With only 6 offsets per location, the rule is: no participant meets the same (placement, offset) twice; signs balanced per participant; least-used first over the study. Bands were re-dealt for P19, P21, P22 and P23, where v2 had put three errors of one band at one placement.
+  - Development ids (P9xx) on the lantern: ±20 mm at both active CDPs.
+- **Lines:** `lantern_plan.py` plans every line from −50 to +50 mm per placement (11 per placement). For each line: rest pose, hold (as far up the axis as the nominal hover), release (10 mm up the axis from the rest pose), approach point, and clearances. P16's +10 to +50 mm lines can't be approached directly from travel; they're reachable by nudges only. The host refuses a trial whose error would need such a line (none does).
+- **Interventions on the lantern:**
+  - `recover_slot_pNN`: Facilitator A stands the plate in the stand; the robot picks it and holds on the original line (the error is kept).
+  - `nudge_across_*_10mm`: one line along the row; at most ±50 mm. `along_rail` is refused.
+  - `place_release`: down the current line to first contact.
+  - `retry_pNN`: the original line again (adjustments discarded).
+  - Hold before the descent works.
+  - In-place and guided recovery are refused.
+  - As on RegoLight, a plate whose decision is over is settled into its pocket when the next placement starts.
+- **Interface:**
+  - In a lantern trial the adjust panel shows only "Along row +/−" (the across control); the along-rail arrows and offset are hidden.
+  - Practice: practice 1 follows the participant's block 1 (architecture and interface); practice 2 is the other architecture on the other interface (LL-PRACTICE = first 2 lantern placements, P02 a decision point).
+- **Checks:** `twin_link/twin_lantern_check.py` 14/14; schedule 8/8; HOME 6/6; hold 7/7; RegoLight e2e 15/15; Unity EditMode 280/282 (the 2 = the clock reference after a reboot).
