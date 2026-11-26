@@ -5,7 +5,7 @@ identity (P950, condition A, active early + middle, SAGAT early) selects the sch
 row at P05 and at P10.
   L1  trial_baseline (lunar_lantern, P950)  -> lantern layout, config lantern_trial_v2, errors at P05 / P10
   L2  place_p01..place_p04                   -> nominal: released 10 mm short, settled into the pocket (<= 1 mm), arm back in travel
-  L3  place_p05 (error +20 mm)               -> the plate rests at first contact: ~+20 mm along the row, perched up its axis
+  L3  place_p05 (error +20 mm), pause_at_hover -> rests at first contact (~+20 mm along the row, perched); the robot waits at the hover
   L4  recover_slot_p05                       -> Facilitator A's hand move into the recovery stand, the robot's pick there, hold on line +20
   L5  nudge_along_rail_plus_10mm             -> refused before motion (along the row only); nothing moved
   L6  nudge_across_minus_10mm x2             -> line +20 -> 0; each achieved about -10 mm along the row
@@ -121,9 +121,10 @@ def main():
         gaps = [e for e in ev if e.get("event") == "settle" and e.get("by") == "settle_after_release"]
         check("L2_nominal_lantern_placements", all(oks) and len(gaps) == 4 and all(abs(e.get("moved_mm", 0) - 10.0) <= 0.5 for e in gaps),
               "{} ok; settles {}".format(sum(oks), [round(e.get("moved_mm", 0), 2) for e in gaps]))
-        r = step("L3", "place_p05")
+        r = step("L3", "place_p05", {"pause_at_hover": True})           # 26 Nov 2026: a decision point: the robot waits at the hover
         e = rvn(r)
         check("L3_error_rests_at_first_contact", r.get("state") == "COMPLETED" and abs(e.get("along_row_mm", 0) - 20) <= 1.0 and e.get("up_axis_mm", 0) > 5
+              and (r.get("result") or {}).get("paused_at_hover") is True
               and obj(r).get("realised_vs_planned_rest_mm") is not None and obj(r)["realised_vs_planned_rest_mm"] <= 1.0, json.dumps({"state": r.get("state"), "reason": r.get("reason"), "realised": e})[:400])
         r = step("L4", "recover_slot_p05")
         res = r.get("result") or {}
