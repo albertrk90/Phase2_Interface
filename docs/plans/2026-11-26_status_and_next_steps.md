@@ -28,12 +28,34 @@ Both architectures now have errors and interventions in the twin.
 - RegoLight e2e 15/15 (also with the rebuilt player).
 - Unity EditMode 280/282: the 2 failures are the C09 clock reference after a reboot (regenerate with `Tools/make_clock_reference.py`).
 
+## Afternoon and evening: two manual runs (P03) and fixes
+**After the first manual run:**
+- **Decision view:** at the decision points (CDPs only), the lantern stops at the hover up the plate axis, so the wrist camera sees the plate just placed. RegoLight already ended at its hover.
+- **Lantern speed:** the approach moves near the formwork were too fast (up to about 258°/s at one joint). Each straight-line move now has its own speed, keeping every joint at or below 28.6°/s.
+- **Clearance after the stand pick (mm):** the gripper stays 105 mm or more from the formwork, and the arm 52 mm or more. The held plate comes within 41 mm of the placed plates and 34 mm of the formwork, both on the final approach to the hold.
+- **Nudge buttons:** relabelled "Away from rail" / "Towards rail".
+- **After each trial:** a "Trial x of 12 complete" screen, with a go-ahead needed from both A and B. After trials 3, 6, 9 and 12, the participant is told to do the survey with the facilitator.
+- **Block screen:** names the condition, e.g. "Block 1 of 4 · Lunar Lantern on the 2D screen". Both facilitators see the current and next block.
+
+**After the second manual run:**
+- **"Link lost" at the end:** this was the S4 build's own 2-hour limit (`maxSeconds` 7200), which ended P03 partway through block 4. The limit is now 12 hours, in both the build and `start_twin_trial.ps1`.
+- **Lantern after an intervention:** place_release and Retry now also wait at the hover over the re-placed plate for the next decision.
+- **Block title:** kept on one line (shrinks to fit); the "Viewing: …" line was dropped.
+- **SAGAT data:** questions from the lantern bank and the generic practice items were logged as RG-2. They are now logged as `placeholder_<bank>`.
+- **Facilitator web pages, status panel:**
+  - fixed boxes: Situation on top, then Participant, Robot (twin) and Stage;
+  - below them, the block cards with three trial bars each and a "Trial n of 12" counter;
+  - practice runs count as training;
+  - the role box no longer lists past button presses.
+
+**Verification:** lantern check 14/14 (it now also checks the pause after release and Retry), RegoLight e2e 15/15, relay 9/9, EditMode 281/283 (C09).
+
 ## Next, in priority order
-1. **Your manual run with a Lunar Lantern block** (P01, block 1 = A). Look at the errors, the stand recovery and the "Along row" panel. Also the small changes from the 25 Nov P01 run, if you remember them.
+1. **SAGAT questions for both architectures** (decided 26 Nov): rewrite the RegoLight questions and write the Lunar Lantern ones together. The lantern bank is still three development placeholders.
 2. **Physical realism of lantern errors** (decided: twin only for now). At commissioning: does a real plate stay perched, or slide into its pocket?
 3. **CDP ranges** (early, middle and late as ranges rather than P05, P10 and P14). Note P16's + lines can't be entered directly: a CDP at P16 would need its errors on the − side, or a replan.
-4. **SAGAT question bank** rewrite (root-level bank file plus embed tool).
-5. **Onboarding video:** the real clip.
+4. **Onboarding video:** the real clip.
+5. **The small changes from the 25 Nov P01 run** (deferred; you didn't remember them).
 
 ### Loose ends
 - Mohsi's feedback on the 24 Nov videos.
