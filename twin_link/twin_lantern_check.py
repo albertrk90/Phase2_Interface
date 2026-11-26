@@ -9,7 +9,8 @@ row at P05 and at P10.
   L4  recover_slot_p05                       -> Facilitator A's hand move into the recovery stand, the robot's pick there, hold on line +20
   L5  nudge_along_rail_plus_10mm             -> refused before motion (along the row only); nothing moved
   L6  nudge_across_minus_10mm x2             -> line +20 -> 0; each achieved about -10 mm along the row
-  L7  place_release                          -> down the centred line: the plate seats in its pocket (<= 1 mm)
+  L7  place_release                          -> down the centred line: the plate seats in its pocket (<= 1 mm); the arm waits at the
+                                                hover up the plate axis (26 Nov: the participant re-decides on the re-placed plate)
   L8  place_p06..place_p09                   -> nominal
   L9  place_p10 + hold request               -> held before the descent on line +20 (plate attached)
   L10 nudge_across_plus_10mm, retry_p10      -> Retry discards the adjustment: the plate rests at the scheduled +20 mm again
@@ -142,8 +143,9 @@ def main():
         check("L6_two_nudges_along_the_row", all(a_ is not None and abs(a_ + 10) <= 0.5 for a_ in ach), json.dumps(ach))
         r = step("L7", "place_release")
         e = rvn(r)
-        check("L7_place_release_seats_the_plate", r.get("state") == "COMPLETED" and e.get("translation_mm", 99) <= 1.0,
-              json.dumps({"state": r.get("state"), "reason": r.get("reason"), "realised": e})[:400])
+        check("L7_place_release_seats_the_plate", r.get("state") == "COMPLETED" and e.get("translation_mm", 99) <= 1.0
+              and (r.get("result") or {}).get("paused_at_hover") is True,
+              json.dumps({"state": r.get("state"), "reason": r.get("reason"), "paused": (r.get("result") or {}).get("paused_at_hover"), "realised": e})[:400])
         oks = nominal(6, 9, "L8")
         check("L8_nominal_after_the_intervention", all(oks), "{} ok".format(sum(oks)))
         rid = "LLCHECK-{}-L9".format(stamp)
@@ -162,7 +164,8 @@ def main():
         r = step("L10b", "retry_p10")
         e = rvn(r)
         check("L10_retry_repeats_the_scheduled_error", r1.get("state") == "COMPLETED" and r.get("state") == "COMPLETED"
-              and (r.get("result") or {}).get("adjustments") == "discarded" and abs(e.get("along_row_mm", 0) - 20) <= 1.0 and e.get("up_axis_mm", 0) > 5,
+              and (r.get("result") or {}).get("adjustments") == "discarded"
+              and (r.get("result") or {}).get("paused_at_hover") is True and abs(e.get("along_row_mm", 0) - 20) <= 1.0 and e.get("up_axis_mm", 0) > 5,
               json.dumps({"nudge": r1.get("state"), "state": r.get("state"), "reason": r.get("reason"), "realised": e})[:400])
         r = step("L11", "place_p11")
         settled = (r.get("result") or {}).get("settled_before") or []

@@ -65,7 +65,8 @@ if ($Browser -and -not $NoBrowser) { Start-Process "http://127.0.0.1:8080/?confi
 $sessions = Join-Path $Here "runs\sessions"
 $args4 = @("-screen-fullscreen", "0", "-screen-width", "1920", "-screen-height", "1080", "-s4", "-s4Protocol", "`"$Protocol`"", "-s4Corol",
            "-s4CorolHost", "http://127.0.0.1:8095", "-s4Root", "`"$sessions`"", "-s4Viewing",
-           "-s3AMode", "virtual", "-s3AVcam", "site", "-s3ASiteRendered", "-s3BMode", "virtual", "-s3BVcam", "wrist", "-s3VcamHost", "http://127.0.0.1:8080", "-s4AskParticipant")   # 20 Nov 2026: the participant identification screen first
+           "-s3AMode", "virtual", "-s3AVcam", "site", "-s3ASiteRendered", "-s3BMode", "virtual", "-s3BVcam", "wrist", "-s3VcamHost", "http://127.0.0.1:8080", "-s4AskParticipant",   # 20 Nov 2026: the participant identification screen first
+           "-s3Seconds", "43200")   # 26 Nov 2026: the S4 build's own deadline is 2 h (S4Build.cs), which ended the P03 manual run in block 4; a full session needs ~2.5-3 h, so 12 h here
 if (-not $AutoFacilitators) { $args4 += "-s4Manual" }
 
 # 23 Nov 2026: WEB FACILITATOR CONSOLES (default; -InAppConsole keeps the old docked console instead). A small relay
