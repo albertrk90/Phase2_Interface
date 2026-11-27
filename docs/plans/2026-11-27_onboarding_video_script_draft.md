@@ -1,8 +1,8 @@
-# Onboarding video: script draft v0.1 (27 Nov 2026)
+# Onboarding video: script draft v0.2 (27 Nov 2026)
 
 **Status:** draft for review. The video is `intro_to_study.mp4`, "Introduction to the study". Participants watch it once, after Facilitator B's go-ahead. They can pause and replay it. Continue appears only when it has played to the end.
 
-**Target length:** about 5½ minutes, in 9 segments.
+**Target length:** about 5¾ minutes, in 8 segments.
 
 **Narration:** about 130 words per minute, calm and neutral.
 
