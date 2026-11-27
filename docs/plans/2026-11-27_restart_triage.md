@@ -39,3 +39,8 @@ The same applies to any trial that stops mid-placement: Terminate this trial, En
 ## Housekeeping
 
 The restart test used the **study ID P01**. Session `S4-P01-01` and P01's entry in `allocation_register.json` must be deleted before the real P01 (pilots should use P901–P924). `S4-P901-01` is a pilot session and can stay or go.
+
+## Update after the late test run (27 Nov)
+- **Restart session** works live (P911: new session `S4-P911-02` 9 s after the click).
+- **End session during a placement** works: the release waits for the move.
+- The per-trial HOME after a stop mid-placement is still rejected as busy (fix 2). It is only harmless when a release step follows.

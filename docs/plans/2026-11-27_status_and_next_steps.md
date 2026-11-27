@@ -91,3 +91,14 @@ As on 26 Nov (`docs/plans/2026-11-26_status_and_next_steps.md`), plus:
   ```
   From `unity/Phase2Client`, using the twin venv. The allocator takes about 80 s.
 - **Scripted player check:** `powershell -ExecutionPolicy Bypass -File Tools\run_session.ps1 -Script`
+
+## Late test run (27 Nov, P919 and P911, on the twin): all checks passed
+- **P919 (pilot of P19):**
+  - The session ran P19's plan: W3, allocation v2, and the twin's entries `P19/C/T1` and `P19/C/T2` with an error at P14 only.
+  - Practice probes used the generic items.
+  - B1-T1 at P10 (no deviation) froze with **RG-6**: 5, 4 and 5 options presented and logged.
+  - Recovery at P14 worked and the trial completed.
+  - **End session mid-placement** in B1-T2: the session closed in 1 s. The app then waited 20 s for the twin's move, sent the robot HOME, and returned to the ID screen.
+- **P911 (pilot of P11):** **Restart session** during the onboarding video. The session closed and the robot went HOME in 4 s. `S4-P911-02` started 9 s after the click, from the beginning, with the same sequence. End session when idle: 1 s.
+- **Seen in the logs:** after a stop mid-placement, the per-trial HOME is still REJECTED as busy (the restart-triage root cause, fix 2). It was harmless here, because the release step's own HOME waited and succeeded.
+- **Data:** the test session `S4-P01-01` and P01's allocation entry were deleted (researcher). No study ID has data. Pilot sessions P901, P911 (×2) and P919 remain.
