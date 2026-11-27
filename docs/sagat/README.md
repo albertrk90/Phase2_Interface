@@ -6,11 +6,17 @@ It is imported into the live protocol `unity/Phase2Client/Assets/Phase2/Experime
 
 ## What runs
 - **Measured freezes:** each one shows one complete predefined set, as L1, then L2, then L3.
-- **Allocation:** `sagat_set_allocation` in the protocol (file `unity/Phase2Client/Tools/data/sagat_set_allocation_v1.json`).
+- **Allocation (v2):** `sagat_set_allocation` in the protocol (file `unity/Phase2Client/Tools/data/sagat_set_allocation_v2.json`).
   - Per participant and architecture, all six sets once: three in 2D, three in XR.
-  - Across P01–P24, each set appears 12 times in 2D and 12 in XR, and 8 times at each of early, middle and late. Trial position T1/T2/T3 is also 8 each.
-- **Independent of Williams:** the inputs are the CDP allocations, which say where each freeze is. The Williams sequence is not an input.
-  - As a diagnostic, how often each set falls in a participant's first block of that architecture varies. For example, LL-6 is 6/24 and LL-1 is 14/24. This is not balanced.
+  - Across P01–P24, each set appears exactly:
+    - 12 times in 2D and 12 in XR;
+    - 8 times each at early, middle and late;
+    - 12 times in the participant's first block of that architecture and 12 in the second;
+    - 8 times each at trial position T1, T2 and T3.
+  - Each interface × block-order cell is exactly 6.
+- **Williams:** block order is never changed. v2 reads each participant's sequence (fixed by id) only to know which of the architecture's two blocks comes first. This keeps a set's apparent difficulty from being confounded with practice on that architecture.
+  - The sequences used are recorded in `williams_sequences`. Unity refuses the allocation if any participant's sequence differs.
+  - v1 (`sagat_set_allocation_v1.json`) ignored block order: LL-6, for example, came first for only 6 of 24 participants. v1 was used only by the 27 Nov P07 development run.
 - **Development ids (P900–P999):** a fixed rule. Sets 1–3 go in the architecture's first block and sets 4–6 in its second.
 - **Practice probes:** the generic practice items, never a bank set.
 - **Replacement trials:** keep the replaced trial's set.
@@ -47,5 +53,5 @@ python -I Tools/sagat_set_allocation.py --protocol <same protocol> --embed <same
 python -I Tools/test_sagat_bank_tools.py
 ```
 - Make a new CSV version rather than editing v2.
-- The allocator takes about 45 s.
-- Re-run it after any change to the bank or to the participant schedule. Unity refuses an allocation made for another bank or schedule.
+- The allocator takes about 80 s.
+- Re-run it after any change to the bank, the participant schedule or a participant's Williams sequence. Unity refuses an allocation made for another bank, schedule or sequence.
