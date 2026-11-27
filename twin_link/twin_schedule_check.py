@@ -11,7 +11,9 @@ v2). This check confirms the interface's copy and the twin agree, and that the t
   S4  P31 (not scheduled, not a development id)   -> refused
   S5  P01 without a condition                     -> refused
   S6  a different schedule_version                -> refused
-  S7  development id P915                         -> DEV entry
+  S7  development id P950                         -> DEV entry (27 Nov 2026: P915 is now a pilot mirror)
+  S8  pilot P901 mirroring P01, condition C T1    -> P01's entry P01/C/T1 (27 Nov 2026, pilot mirrors)
+  S9  pilot P901 without naming the mirror        -> refused
 
     "..\\Phase 2_COROL\\lab_digital_twin\\.venv\\Scripts\\python.exe" -I twin_link\\twin_schedule_check.py [--twin-port 8092] [--host-port 8098]
 """
@@ -133,9 +135,18 @@ def main():
         r = baseline("S6", p)
         check("S6_schedule_version_pinned", r.get("state") in ("REJECTED", "FAILED") and "expects schedule" in str(r.get("reason")), "{} {}".format(r.get("state"), str(r.get("reason"))[:200]))
 
-        r = baseline("S7", {"participant_id": "P915", "architecture": "regolight", "interface": "2d", "trial_id": "B1-T1", "block": 1, "condition": "C",
+        r = baseline("S7", {"participant_id": "P950", "architecture": "regolight", "interface": "2d", "trial_id": "B1-T1", "block": 1, "condition": "C",
                             "allocation": {"active": ["early", "late"], "inactive": ["middle"], "sagat": "late"}})
         check("S7_dev_id_dev_entry", r.get("state") == "COMPLETED" and ts(r).get("entry") == "DEV/early-late/late", json.dumps({"state": r.get("state"), "reason": r.get("reason"), "schedule": ts(r)})[:300])
+
+        p = ident("P01", "C", 1); p["participant_id"] = "P901"; p["mirrors"] = "P01"
+        r = baseline("S8", p)
+        check("S8_pilot_mirror_runs_the_study_entry", r.get("state") == "COMPLETED" and ts(r).get("entry") == "P01/C/T1"
+              and ts(r).get("errors_at") == sorted(sched["trials"]["P01/C/T1"]["variations"]), json.dumps({"state": r.get("state"), "reason": r.get("reason"), "schedule": ts(r)})[:400])
+
+        p = ident("P01", "C", 1); p["participant_id"] = "P901"
+        r = baseline("S9", p)
+        check("S9_pilot_without_mirror_refused", r.get("state") in ("REJECTED", "FAILED") and "mirrors" in str(r.get("reason")), "{} {}".format(r.get("state"), str(r.get("reason"))[:200]))
     finally:
         for p in procs:
             p.terminate()
