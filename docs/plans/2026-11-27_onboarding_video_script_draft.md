@@ -59,7 +59,7 @@
 
 **Footage:** a placement finishes. The robot releases, retreats and holds above the element. The status shows `Element released · holding for your decision`, and the hint `Decision point · choose how to proceed` appears. Show **Inspect**: switch camera, click to zoom, drag, **Reset view**, **End inspection**. Then Allow → confirm.
 
-> **"Several times during each trial the robot stops after releasing an element and waits for you. This is a decision point. Take a moment to look at the element that was just placed.**
+> **"Several times during each trial the robot stops after releasing an element and waits for you. This is a decision point. Take a moment to look at the element that was just placed. There is no time limit on your decision.**
 > **Choose Inspect to look more closely: switch cameras, click the image to zoom in, and drag to move around. Reset view takes you back.**
 > **If you judge that the element can stay as it is, choose Allow. The robot then continues with the next element.**
 > **Some decision points need nothing from you, and some may need an adjustment. That judgement is yours.**
@@ -104,9 +104,9 @@
 **Footage:** a block introduction screen, a "Trial 3 of 12 complete" screen, then a still of the headset.
 
 > **"The session has four blocks: each structure once on this screen and once in a headset. The controls in the headset are the same. Each block has three trials. Before the first block you will do two short practice runs.**
-> **After each trial you will see a short summary screen; after every third trial you will complete a short survey with the facilitator. You can ask for a break at any time."**
+> **After each trial you will see a short summary screen. At the end of each block you will complete a short survey with the facilitator. You can ask for a break at any time."**
 
-`4 blocks × 3 trials · practice first · survey after trials 3, 6, 9 and 12`
+`4 blocks × 3 trials · practice first · short survey at the end of each block`
 
 ## Segment 8: Close (5:35–5:50)
 
@@ -129,9 +129,15 @@
   The tag is participant-visible. Check whether the build shows it. If it does, crop it out, or agree a recording build without it.
 - **Length check:** segments 1–8 are about 5:50. If it runs long, trim segment 2 to one placement each, and cut the hold-while-building sentence in segment 5 (the practice run covers it).
 
-## Open points for the researcher
+## Decisions (researcher, 27 Nov 2026)
 
-1. **Observation interval:** the protocol has `formal_cdp_observation_ms` 1000, but its note says 10 s. Which is intended? Segment 4 says "take a moment" so it fits either.
-2. **Survey wording:** in segment 7, "a short survey with the facilitator". Is it Survey B only, at block end?
-3. **Breaks:** confirm that participants may ask for a break at any time (the Pause button on B's page).
-4. **Narrator:** you, a colleague, or synthesised? The same voice is needed if segment 6 is re-recorded.
+1. **Decision time:** no time limit; segment 4 now says so.
+   - Separately, the protocol's look-only observation interval at each decision point is 1 s, although its note said 10 s. That interval comes before the controls open and is identical at every decision point.
+   - It is kept at 1 s and the note is corrected.
+   - SAGAT set 6 (movement during the observation period) needs a longer, interpretable interval before it can be validated.
+2. **Survey:** Survey B only, at the end of each block (segment 7 updated).
+3. **Breaks:** participants may ask for a break at any time (segment 7; the Pause button on B's page).
+4. **Narration: synthesised.**
+   - Use one voice and one setting throughout, and keep the voice name and settings with the files, so segment 6 can be regenerated identically if the familiarisation text changes.
+   - Generate one audio file per segment and lay it over the footage; segment lengths then follow the audio.
+   - Check pronunciation of "RegoLight" (REG-oh-light, as in regolith; confirm with the team) and "Lunar Lantern". Use a plain, unhurried rate: about 130 words per minute, or slightly slower for segment 6.

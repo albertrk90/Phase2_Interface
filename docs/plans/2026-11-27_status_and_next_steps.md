@@ -77,7 +77,8 @@ This is the resume point for the next session. Everything below is simulation on
 ### Loose ends
 - Mohsi's feedback on the 24 Nov videos.
 - Physically: 90 lantern plates and the recovery stand.
-- The protocol's observation interval is 1000 ms, but its note says 10 s (raised in the script draft).
+- **Observation interval:** settled. 1 s look-only, then no time limit on the decision; the protocol note is corrected. SAGAT set 6 needs a longer interpretable interval before it can be validated.
+- **Onboarding script:** answers recorded. Survey B at block end, breaks any time, synthesised narration.
 
 ## How to run things
 As on 26 Nov (`docs/plans/2026-11-26_status_and_next_steps.md`), plus:
