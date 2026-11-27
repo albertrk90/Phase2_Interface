@@ -63,9 +63,10 @@ This is the resume point for the next session. Everything below is simulation on
 - **OneDrive bundle:** `Phase2Client_unity_20261127_1600.bundle`.
 
 ## Next, in priority order
-1. **Restarts:** debug them. First ask the researcher what went wrong (which restart, and what was seen); the P902 session logs are in `twin_link/runs/sessions/`.
-2. **Onboarding video:** the researcher reviews the script draft (open points at its end), then records it with ID P950.
-3. **SAGAT before pilots:**
+1. **XR (Quest 3) interface:** starts Monday (researcher). Android build support is installed; no XR packages yet (installing them needs approval).
+2. **Restarts:** triaged in `docs/plans/2026-11-27_restart_triage.md`. Root cause: after a trial stops mid-placement, the new trial's twin baseline is rejected as "busy" and never re-sent, so the reset hangs. Fixes 1–6 are listed there. Also delete the test session S4-P01-01 and P01's allocation entry before the real P01.
+3. **Onboarding video:** the researcher reviews the script draft (open points at its end), then records it with ID P950.
+4. **SAGAT before pilots:**
    - check the five-option question screen on screen;
    - decide on sets 5 and 6 (keep them, or swap them out until validated);
    - scoring comes later, keeping simulated keys apart from physically verified ones.
