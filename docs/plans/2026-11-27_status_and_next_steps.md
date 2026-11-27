@@ -63,8 +63,12 @@ This is the resume point for the next session. Everything below is simulation on
 - **OneDrive bundle:** `Phase2Client_unity_20261127_1600.bundle`.
 
 ## Next, in priority order
-1. **XR (Quest 3) interface:** starts Monday (researcher). Android build support is installed; no XR packages yet (installing them needs approval).
-2. **Restarts:** triaged in `docs/plans/2026-11-27_restart_triage.md`. Root cause: after a trial stops mid-placement, the new trial's twin baseline is rejected as "busy" and never re-sent, so the reset hangs. Fixes 1–6 are listed there. Also delete the test session S4-P01-01 and P01's allocation entry before the real P01.
+1. **MONDAY, FIRST (about 40 min): fix the restart hang** (researcher, 27 Nov).
+   - Before a twin reset or HOME, wait until no twin move is in flight, then re-send only on a "busy" reply.
+   - Show "Waiting for the robot to finish its current move" on both pages, and log late placement results under their own trial.
+   - Details: `docs/plans/2026-11-27_restart_triage.md`, fixes 1-5.
+   - Live test: a pilot ID, then Restart this trial and Restart this block, each pressed mid-placement.
+2. **XR (Quest 3) interface:** starts Monday after the fix. Android build support is installed; no XR packages yet (installing them needs approval).
 3. **Onboarding video:** the researcher reviews the script draft (open points at its end), then records it with ID P950.
 4. **SAGAT before pilots:**
    - check the five-option question screen on screen;
